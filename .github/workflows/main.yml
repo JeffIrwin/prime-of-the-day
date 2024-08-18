@@ -1,16 +1,16 @@
+
 name: CI
+
+#===============================================================================
+
 on:
   schedule:
   - cron: '*/5 * * * *'
   #- cron: '17 9 * * *'
 
-## can there be separators on-push and on-schedule jobs?  it would be nice to
-## always have dry runs on push for debugging
-#on: [push]
-
 jobs:
-  ci-job:
-    name: ci-job
+  ci-job-schedule:
+    name: ci-job-schedule
 
     runs-on: ubuntu-latest
 
@@ -24,11 +24,41 @@ jobs:
         date
         git log -1
 
-    - name: "build and post thread"
+    - name: "build and post thread wet run"
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
       run: |
         chmod +x ./run.sh
         ./run.sh
+
+#===============================================================================
+
+on: [push]
+
+jobs:
+  ci-job-push:
+    name: ci-job-push
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: "git checkout"
+      uses: actions/checkout@v4
+      with: { ref: main }
+
+    - name: "log date"
+      run: |
+        date
+        git log -1
+
+    - name: "build and post thread dry run"
+      env:
+        user_id: ${{ secrets.user_id }}
+        token:   ${{ secrets.token   }}
+      run: |
+        chmod +x ./run.sh
+        ./run.sh --dry
+
+#===============================================================================
 
