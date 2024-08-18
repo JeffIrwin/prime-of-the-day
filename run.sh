@@ -88,11 +88,11 @@ pushd store
 git status
 git log -1
 git add ./prime-of-the-day/
+git config --unset-all http.https://github.com/.extraheader
 git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
 git commit -am "auto ci/cd commit from prime-of-the-day"
 git remote -v
-git config --unset-all http.https://github.com/.extraheader
 git push
 popd  # from store
 set +x
