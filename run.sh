@@ -24,8 +24,8 @@ echo "prime = $prime"
 
 text="$prime"
 
-# exit here for a dry run
-exit 0
+## exit here for a dry run
+#exit 0
 
 # You can get the user id like this:
 #
