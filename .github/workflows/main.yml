@@ -11,7 +11,10 @@ jobs:
   test_schedule:
     runs-on: ubuntu-latest
     steps:
-      - name:
+      - name: "main step"
+        env: 
+          user_id: ${{ secrets.user_id }}
+          token:   ${{ secrets.token   }}
         run: |
           echo "starting github action"
           g++ -o main main.cpp

@@ -3,6 +3,13 @@
 #set -xe
 set -e
 
+#echo "user_id = $user_id"
+echo "user_id = ${user_id:0:3}********"
+echo "USER_ID = ${USER_ID:0:3}********"
+
+# TODO
+exit 0
+
 #source secrets.sh
 
 # Image example:
