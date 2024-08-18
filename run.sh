@@ -74,7 +74,6 @@ convert \
 	-background "#114499" \
 	-fill "#66ddaa" \
 	-pointsize 72 label:"69,420" \
-	-font "Liberation Serif" \
 	-bordercolor "#114499" -border 50x50 \
 	-bordercolor "#5588cc" -border 50x50 \
 	prime.png
