@@ -37,6 +37,7 @@ jobs:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
       run: |
+        echo github.event.push
         chmod +x ./run.sh
         ./run.sh
 
