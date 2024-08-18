@@ -69,7 +69,7 @@ text="$prime"
 # test out an idea here: use imagemagick (`convert`) to make an image of given
 # `label` text
 which convert
-apt install -y gsfonts
+sudo apt-get install -y gsfonts
 #convert -list font
 convert \
 	-background "#114499" \
