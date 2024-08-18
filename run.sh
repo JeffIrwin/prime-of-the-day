@@ -94,9 +94,9 @@ git config --global user.name "Jeff Irwin"
 git commit -am "auto ci/cd commit from prime-of-the-day"
 git remote -v
 #git push
-echo "GITHUB_TOKEN = ${GITHUB_TOKEN:0:3}********"
-#git push --set-upstream https://user:$GITHUB_TOKEN@github.com/JeffIrwin/store main
-git push --prune https://token:$GITHUB_TOKEN@github.com/JeffIrwin/store
+echo "GH_PA_TOKEN = ${GH_PA_TOKEN:0:3}********"
+#git push --set-upstream https://user:$GH_PA_TOKEN@github.com/JeffIrwin/store main
+git push --prune https://token:$GH_PA_TOKEN@github.com/JeffIrwin/store
 popd  # from store
 set +x
 
