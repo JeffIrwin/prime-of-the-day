@@ -1,0 +1,17 @@
+
+on:
+  schedule:
+    #- cron: '30 5 * * 1,3'
+    - cron: '* * * * *'
+
+jobs:
+  test_schedule:
+
+    runs-on: ubuntu-latest
+    steps:
+      - name:
+        run: |
+          echo "starting github action"
+          g++ -o main main.cpp
+          ./main
+
