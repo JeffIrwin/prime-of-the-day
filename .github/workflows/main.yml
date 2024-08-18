@@ -1,22 +1,35 @@
-name: Experiment
+name: CI
 on: 
   schedule:
   - cron: '*/5 * * * *'
 
 jobs:
-  job1:
-    name: Debug
+  job:
+    name: scheduled job
 
     runs-on: ubuntu-latest
 
     steps:
     - name: Git checkout
       uses: actions/checkout@v3
-
       with: { ref: main }
       #with: { ref: debug }
+
     - name: List files
       run: ls
+
+    - name: "build and post thread"
+      env: 
+        user_id: ${{ secrets.user_id }}
+        token:   ${{ secrets.token   }}
+      run: |
+        echo "starting github action"
+        ls
+        pwd
+        g++ -o main main.cpp
+        ./main
+        chmod +x ./run.sh
+        ./run.sh
 
 #name: "prime-of-the-day action"
 #on:
