@@ -1,11 +1,12 @@
 
 name: "main github action"
-on:
-  schedule:
-    - cron: '*/20 * * * *'
-    #- cron: '45 * * * *'
-    #- cron: '* * * * *'
-    #- cron: '30 5 * * 1,3'
+#on:
+#  schedule:
+#    - cron: '*/20 * * * *'
+#    #- cron: '45 * * * *'
+#    #- cron: '* * * * *'
+#    #- cron: '30 5 * * 1,3'
+on: [push]
 
 jobs:
   test_schedule:
