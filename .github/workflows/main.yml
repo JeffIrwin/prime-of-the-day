@@ -1,8 +1,8 @@
 name: CI
 on:
-  schedule:              # note that gh schedules usually start a few minutes late
-  #- cron: '17  9 * * *'  # 9:17 UTC time (just after ~5 AM eastern depending on dst) every day
-  - cron: '*/5 * * * *'  # every 5 minutes, or as fast as gh will run
+  schedule:
+  - cron: '*/5 * * * *'
+  #- cron: '17 9 * * *'
 
 ## can there be separators on-push and on-schedule jobs?  it would be nice to
 ## always have dry runs on push for debugging

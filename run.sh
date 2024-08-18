@@ -3,6 +3,24 @@
 # `set -x` will leak secrets
 set -e
 
+# Default arguments
+dry_run="false"
+
+pos=0
+while test $# -gt 0 ; do
+	#echo "$1"
+
+	if [[ "$1" == "--dry" ]] ; then
+		dry_run="true"
+
+	else
+		echo -e "\e[33mwarning: unknown argument \"$1\" ignored\e[0m"
+
+	fi
+
+	shift
+done
+
 #source secrets.sh
 #echo "user_id = ${user_id:0:3}********"
 #echo "token = ${token:0:3}********"
@@ -48,8 +66,12 @@ echo "prime = $prime"
 # set the text payload to be posted
 text="$prime"
 
-## exit here for a dry run
-exit 0
+if [[ "$dry_run" == "true" ]] ; then
+	echo "dry run"
+	exit 0
+fi
+echo "wet run"
+exit 0 # TODO
 
 url="https://graph.threads.net/v1.0"
 
