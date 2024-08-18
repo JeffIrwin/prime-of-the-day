@@ -55,12 +55,11 @@ int main()
 	auto day_zero = 2024_y/8/16;
 	//auto day_zero = 2024_y/8/11;
 
-	// TODO: cerr?  cout is hidden by run.sh
-	std::cout << "zero  = " << day_zero << '\n';
-	std::cout << "today = " << today    << '\n';
+	std::cerr << "zero  = " << day_zero << '\n';
+	std::cerr << "today = " << today    << '\n';
 
 	auto days = (sys_days{today} - sys_days{day_zero}).count();
-	std::cout << "days = " << days << " days\n";
+	std::cerr << "days = " << days << " days\n";
 
 	// log nothing else after this.  the run.sh script will pickup the last line
 	// of stdout for the text payload
