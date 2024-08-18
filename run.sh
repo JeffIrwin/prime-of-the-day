@@ -71,7 +71,6 @@ if [[ "$dry_run" == "true" ]] ; then
 	exit 0
 fi
 echo "wet run"
-exit 0 # TODO
 
 url="https://graph.threads.net/v1.0"
 
