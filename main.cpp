@@ -64,19 +64,21 @@ int main()
 
 	using namespace date;
 	using namespace std;
-	//using namespace std::chrono; // ambiguous clashes with date.h
 
-	auto x = 2012_y/1/24;
-	auto y = 2013_y/1/8;
-	cout << x << '\n';
-	cout << y << '\n';
-	cout << "difference = " << (sys_days{y} - sys_days{x}).count() << " days\n";
+	//auto x = 2012_y/1/24;
+	//auto y = 2013_y/1/8;
+	//cout << x << '\n';
+	//cout << y << '\n';
+	//cout << "difference = " << (sys_days{y} - sys_days{x}).count() << " days\n";
 
 	auto today = floor<days>(chrono::system_clock::now());
-	cout << today << '\n';
 
 	//auto day_zero = 2024_y/8/17;
 	auto day_zero = 2024_y/8/11;
+
+	cout << "zero  = " << day_zero << '\n';
+	cout << "today = " << today    << '\n';
+
 	auto days = (sys_days{today} - sys_days{day_zero}).count();
 	cout << "days = " << days << " days\n";
 	std::cout << nth_prime_number(days) << "\n";

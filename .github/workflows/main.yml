@@ -4,22 +4,22 @@ on:
   - cron: '*/5 * * * *'
 
 jobs:
-  job1:
-    name: scheduled_job
+  ci-job:
+    name: ci-job
 
     runs-on: ubuntu-latest
 
     steps:
-    - name: Git checkout
+    - name: "git checkout"
       uses: actions/checkout@v3
       with: { ref: main }
       #with: { ref: debug }
 
-    - name: List files
+    - name: "log date"
       run: |
-        ls
+        #ls
         date
-        git status
+        #git status
         git log -1
 
     - name: "build and post thread"
@@ -28,62 +28,10 @@ jobs:
         token:   ${{ secrets.token   }}
       run: |
         echo "starting github action"
-        ls
-        pwd
-        g++ -o main main.cpp
-        ./main
+        #ls
+        #pwd
+        #g++ -o main main.cpp
+        #./main
         chmod +x ./run.sh
         ./run.sh
 
-#name: "prime-of-the-day action"
-#on:
-#  schedule:
-#    - cron: '*/5 * * * *'
-#    #- cron: '45 * * * *'
-#    #- cron: '* * * * *'
-#    #- cron: '30 5 * * 1,3'
-##on: [push]
-#
-#jobs:
-#  scheduled_job:
-#    runs-on: ubuntu-latest
-#    steps:
-#
-#      - uses: actions/checkout@v3
-#
-#      - name: "build and post thread"
-#        env: 
-#          user_id: ${{ secrets.user_id }}
-#          token:   ${{ secrets.token   }}
-#        run: |
-#          echo "starting github action"
-#          ls
-#          pwd
-#          g++ -o main main.cpp
-#          ./main
-#          chmod +x ./run.sh
-#          ./run.sh
-#
-#name: "prime-of-the-day action"
-#on: [push]
-#
-#jobs:
-#  push_job:
-#    runs-on: ubuntu-latest
-#    steps:
-#
-#      - uses: actions/checkout@v3
-#
-#      - name: "build and post thread"
-#        env: 
-#          user_id: ${{ secrets.user_id }}
-#          token:   ${{ secrets.token   }}
-#        run: |
-#          echo "starting github action"
-#          ls
-#          pwd
-#          g++ -o main main.cpp
-#          ./main
-#          chmod +x ./run.sh
-#          #./run.sh
-#
