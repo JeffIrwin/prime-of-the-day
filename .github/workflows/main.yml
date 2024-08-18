@@ -16,7 +16,10 @@ jobs:
       #with: { ref: debug }
 
     - name: List files
-      run: ls
+      run: |
+        ls
+        git status
+        git log -1
 
     - name: "build and post thread"
       env: 
