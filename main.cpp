@@ -8,7 +8,7 @@
 
 size_t nth_prime_number(size_t n)
 {
-	// Return the nth prime.  To be clear about off-by-one errors,
+	// return the nth prime.  to be clear about off-by-one errors,
 	// nth_prime_number(1) returns 2.
 	if (n <= 0)
 		return 2;
@@ -39,51 +39,33 @@ size_t nth_prime_number(size_t n)
 
 int main()
 {
-	/*
-	std::cout << nth_prime_number( 0) << "\n";
-	std::cout << nth_prime_number( 1) << "\n";
-	std::cout << nth_prime_number( 2) << "\n";
-	std::cout << nth_prime_number(10) << "\n";
-
-	for (size_t i = 0; i < 100; i++)
-		std::cout << nth_prime_number(i) << "\n";
-
-	//std::cout << nth_prime_number(90000) << "\n";
-	//std::cout << nth_prime_number(1000000) << "\n";
-	*/
-
-	//// can't get c++20 working :(
-	//using namespace std::chrono;
-	//using namespace std;
-	//auto x = 2012y/1/24;
-	//auto y = 2013y/1/8;
-	////cout << x << '\n';
-	////cout << y << '\n';
-	////cout << "difference = " << sys_days{y} - sys_days{x} << 'n';
-	//cout << "difference = " << int(sys_days{y} - sys_days{x}) << 'n';
+	//// the 100,000'th prime number is 1,299,709 and can be calculated here in
+	//// about 13 seconds.  if i continue posting every day, it will take around
+	//// 300 years to get to that point, so there aren't any concerns about run
+	//// time or size_t overflow.
+	//std::cout << nth_prime_number(100000) << "\n";
 
 	using namespace date;
-	//using namespace std;
+	using namespace std::chrono;
 
-	//auto x = 2012_y/1/24;
-	//auto y = 2013_y/1/8;
-	//cout << x << '\n';
-	//cout << y << '\n';
-	//cout << "difference = " << (sys_days{y} - sys_days{x}).count() << " days\n";
+	auto today = floor<days>(system_clock::now());
 
-	auto today = floor<days>(std::chrono::system_clock::now());
-
+	// this is the day before i started posting.  post 2 on the first day, 3 and
+	// the second, ...
 	auto day_zero = 2024_y/8/17;
 	//auto day_zero = 2024_y/8/11;
 
+	// TODO: cerr?  cout is hidden by run.sh
 	std::cout << "zero  = " << day_zero << '\n';
 	std::cout << "today = " << today    << '\n';
 
 	auto days = (sys_days{today} - sys_days{day_zero}).count();
 	std::cout << "days = " << days << " days\n";
 
-	// Log nothing else after this.  The run.sh script will pickup the last line
+	// log nothing else after this.  the run.sh script will pickup the last line
 	// of stdout for the text payload
+	//
+	// TODO: comma thousands separator. fmtlib?
 	std::cout << nth_prime_number(days) << "\n";
 
 	return 0;

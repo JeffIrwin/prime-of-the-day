@@ -1,8 +1,9 @@
 name: CI
-on: 
-  schedule:  # 9:17 UTC time (~4 AM eastern) every day
-  - cron: '17 9 * * *'
-  #- cron: '*/5 * * * *'
+#on:
+#  schedule:  # 9:17 UTC time (~4 AM eastern) every day
+#  - cron: '17 9 * * *'
+#  #- cron: '*/5 * * * *'
+on: [push]
 
 jobs:
   ci-job:
@@ -14,25 +15,17 @@ jobs:
     - name: "git checkout"
       uses: actions/checkout@v3
       with: { ref: main }
-      #with: { ref: debug }
 
     - name: "log date"
       run: |
-        #ls
         date
-        #git status
         git log -1
 
     - name: "build and post thread"
-      env: 
+      env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
       run: |
-        echo "starting github action"
-        #ls
-        #pwd
-        #g++ -o main main.cpp
-        #./main
         chmod +x ./run.sh
         ./run.sh
 
