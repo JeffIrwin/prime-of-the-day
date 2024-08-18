@@ -23,7 +23,7 @@ jobs:
         git log -1
 
     - name: "post thread dry run"
-      if: github.event.push == true
+      if: github.event.schedule != '*/5 * * * *'
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
@@ -32,7 +32,7 @@ jobs:
         ./run.sh --dry
 
     - name: "post thread wet run"
-      if: github.event.push != true
+      if: github.event.schedule == '*/5 * * * *'
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
