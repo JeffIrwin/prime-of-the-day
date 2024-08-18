@@ -93,7 +93,8 @@ git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
 git commit -am "auto ci/cd commit from prime-of-the-day"
 git remote -v
-git push
+#git push
+git push --set-upstream https://user:$GITHUB_TOKEN@github.com/JeffIrwin/store main
 popd  # from store
 set +x
 
