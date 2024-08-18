@@ -37,6 +37,7 @@ jobs:
       with:
         repository: JeffIrwin/store
         ref: main
+        path: "./store"
 
     - name: "post thread dry run"
       if: github.event.schedule != '17 9 * * *'
@@ -45,6 +46,7 @@ jobs:
         token:   ${{ secrets.token   }}
       run: |
         ls
+        ls store
         chmod +x ./run.sh
         ./run.sh --dry
 
