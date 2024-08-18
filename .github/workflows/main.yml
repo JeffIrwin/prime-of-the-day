@@ -22,11 +22,24 @@ jobs:
         date
         git log -1
 
-    - name: "build and post thread wet run"
+    - name: "post thread wet run"
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
+      if: github.event.push == true
+      run: |
+        chmod +x ./run.sh
+        ./run.sh --dry
+      else:
       run: |
         chmod +x ./run.sh
         ./run.sh
+
+#    steps:
+#      - name: Not on Monday or Wednesday
+#        if: github.event.schedule != '30 5 * * 1,3'
+#        run: echo "This step will be skipped on Monday and Wednesday"
+#      - name: Every time
+#        run: echo "This step will always run"
+
 
