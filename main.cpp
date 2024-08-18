@@ -5,6 +5,11 @@
 #include <string>
 #include <vector>
 
+// if you have g++ 13 or another compiler with c++ 20 support, you can do date
+// calculations without this dependency. my ubuntu only has g++ 11 :(
+//
+// ref:  https://stackoverflow.com/a/31928010/4347028
+//
 #include "date.h"
 
 size_t nth_prime_number(size_t n)

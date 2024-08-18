@@ -66,6 +66,18 @@ echo "prime = $prime"
 # set the text payload to be posted
 text="$prime"
 
+# test out an idea here: use imagemagick (`convert`) to make an image of given
+# `label` text
+which convert
+convert \
+	-background "#114499" \
+	-fill "#66ddaa" \
+	-pointsize 72 label:"69,420" \
+	-font helvetica \
+	-bordercolor "#114499" -border 50x50 \
+	-bordercolor "#5588cc" -border 50x50 \
+	prime.png
+
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
 	exit 0

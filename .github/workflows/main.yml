@@ -6,6 +6,16 @@ on:
     - cron: '17 9 * * *'
     #- cron: '*/5 * * * *'
 
+# note that github schedules usually start a few minutes late.  cron examples:
+#
+#    - cron: '17  9 * * *'  # 9:17 UTC time (just after ~5 AM eastern depending on dst) every day
+#    - cron: '*/5 * * * *'  # every 5 minutes, or as fast as gh will run
+#
+# github yaml is sensitive to whitespace and end-of-line comments, so don't try
+# to comment the actual cron's above.  the only way to have separate on-push and
+# on-schedule jobs is by WETly repeating the cron string below in multiple `if`
+# statements.  github does not have `else`.
+
 jobs:
   ci-job:
     name: ci-job
