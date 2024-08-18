@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #set -xe
+set -e
 
-source secrets.sh
+#source secrets.sh
 
 # Image example:
 #
@@ -10,7 +11,7 @@ source secrets.sh
 
 #text="now i have to figure out what to do with this. post \"it's wednesday my dudes\" every wednesday or something"
 #text="hello from ec2"
-text="3"
+text="7"
 
 # You can get the user id like this:
 #
@@ -50,4 +51,6 @@ curl -i -X POST \
 	"$url/$user_id/threads_publish" \
 	-d "creation_id=$creation_id" \
 	-d "access_token=$token"
+
+echo
 
