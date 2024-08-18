@@ -63,7 +63,7 @@ int main()
 	//cout << "difference = " << int(sys_days{y} - sys_days{x}) << 'n';
 
 	using namespace date;
-	using namespace std;
+	//using namespace std;
 
 	//auto x = 2012_y/1/24;
 	//auto y = 2013_y/1/8;
@@ -71,16 +71,19 @@ int main()
 	//cout << y << '\n';
 	//cout << "difference = " << (sys_days{y} - sys_days{x}).count() << " days\n";
 
-	auto today = floor<days>(chrono::system_clock::now());
+	auto today = floor<days>(std::chrono::system_clock::now());
 
-	//auto day_zero = 2024_y/8/17;
-	auto day_zero = 2024_y/8/11;
+	auto day_zero = 2024_y/8/17;
+	//auto day_zero = 2024_y/8/11;
 
-	cout << "zero  = " << day_zero << '\n';
-	cout << "today = " << today    << '\n';
+	std::cout << "zero  = " << day_zero << '\n';
+	std::cout << "today = " << today    << '\n';
 
 	auto days = (sys_days{today} - sys_days{day_zero}).count();
-	cout << "days = " << days << " days\n";
+	std::cout << "days = " << days << " days\n";
+
+	// Log nothing else after this.  The run.sh script will pickup the last line
+	// of stdout for the text payload
 	std::cout << nth_prime_number(days) << "\n";
 
 	return 0;

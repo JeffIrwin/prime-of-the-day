@@ -1,7 +1,8 @@
 name: CI
 on: 
-  schedule:
-  - cron: '*/5 * * * *'
+  schedule:  # 9:17 UTC time (~4 AM eastern) every day
+  - cron: '17 9 * * *'
+  #- cron: '*/5 * * * *'
 
 jobs:
   ci-job:
