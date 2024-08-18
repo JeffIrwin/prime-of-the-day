@@ -44,7 +44,7 @@ jobs:
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
       run: |
         echo "ls"
         ls
@@ -58,7 +58,7 @@ jobs:
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
       run: |
         echo github.event.push
         chmod +x ./run.sh
