@@ -13,11 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "main step"
+      - uses: actions/checkout@v3
         env: 
           user_id: ${{ secrets.user_id }}
           token:   ${{ secrets.token   }}
         run: |
           echo "starting github action"
+          ls
+          pwd
           g++ -o main main.cpp
           ./main
           chmod +x ./run.sh
