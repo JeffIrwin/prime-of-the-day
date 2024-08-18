@@ -80,7 +80,19 @@ convert \
 	-bordercolor "#5588cc" -border 50x50 \
 	"$image_file"
 
+set -x
 ls -ltrh "$image_file"
+mkdir -p store/prime-of-the-day/
+mv "$image_file" store/prime-of-the-day/
+pushd store
+git status
+git log -1
+git add ./prime-of-the-day/
+git commit -am "auto ci/cd commit from prime-of-the-day"
+git remote -v
+git push
+popd  # from store
+set +x
 
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
