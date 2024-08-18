@@ -3,12 +3,13 @@
 #set -xe
 set -e
 
-#echo "user_id = $user_id"
-echo "user_id = ${user_id:0:3}********"
-echo "USER_ID = ${USER_ID:0:3}********"
+#echo "user_id = $user_id"  # CAREFUL: THIS IS THE WHOLE USER ID
 
-# TODO
-exit 0
+#echo "USER_ID = ${USER_ID:0:3}********"
+echo "user_id = ${user_id:0:3}********"
+echo "token = ${token:0:3}********"
+
+#exit 0
 
 #source secrets.sh
 
@@ -18,7 +19,7 @@ exit 0
 
 #text="now i have to figure out what to do with this. post \"it's wednesday my dudes\" every wednesday or something"
 #text="hello from ec2"
-text="7"
+text="11"
 
 # You can get the user id like this:
 #
