@@ -52,7 +52,7 @@ int main()
 
 	// this is the day before i started posting.  post 2 on the first day, 3 and
 	// the second, ...
-	auto day_zero = 2024_y/8/17;
+	auto day_zero = 2024_y/8/16;
 	//auto day_zero = 2024_y/8/11;
 
 	// TODO: cerr?  cout is hidden by run.sh

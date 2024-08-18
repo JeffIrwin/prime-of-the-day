@@ -49,7 +49,7 @@ echo "prime = $prime"
 text="$prime"
 
 ## exit here for a dry run
-exit 0
+#exit 0
 
 url="https://graph.threads.net/v1.0"
 
