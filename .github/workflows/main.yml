@@ -33,6 +33,14 @@ jobs:
         git log -1
         echo "event name = ${{ github.event_name }} "
 
+    - name: "test schedule"
+      if: github.event_name == "schedule"
+      run: echo "schedule"
+
+    - name: "test not schedule"
+      if: github.event_name != "schedule"
+      run: echo "not schedule"
+
     - name: "clone store"
       uses: actions/checkout@v4
       with:

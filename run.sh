@@ -106,24 +106,17 @@ subdir="prime-of-the-day"
 
 # push the image to github. all threads image posts must have a public image
 # url, so it needs to be uploaded somewhere else before posting on threads
-set -x
-ls -ltrh "$image_file"
 mkdir -p store/$subdir/
 mv "$image_file" store/$subdir/
 pushd store
-git status
-git log -1
 git add ./$subdir/
-git config --unset-all http.https://github.com/.extraheader || true  # fails locally
+#git config --unset-all http.https://github.com/.extraheader || true  # fails locally
 git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
 git commit -am "auto ci/cd commit from prime-of-the-day"
-git remote -v
 git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
-#git push --prune https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
 store_hash=$(git rev-parse HEAD)  # commit hash in store repo
 popd  # from store
-set +x
 
 url="https://graph.threads.net/v1.0"
 
