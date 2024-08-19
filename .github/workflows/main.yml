@@ -31,11 +31,9 @@ jobs:
       run: |
         date
         git log -1
-        # TODO: can any of these be used to clean up the event schedule
-        # conditions for wet vs dry runs?
-        echo "event schedule = ${{ github.event.schedule }} "
-        echo "event push     = ${{ github.event.push }} "
-        echo "event          = ${{ github.event      }} "
+        #echo "event schedule = ${{ github.event.schedule }} " # blank
+        #echo "event push     = ${{ github.event.push }} "     # blank
+        #echo "event          = ${{ github.event      }} "     # "Object"
 
     - name: "clone store"
       uses: actions/checkout@v4
@@ -55,11 +53,6 @@ jobs:
         token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
       run: |
-        echo "ls"
-        ls
-        echo "ls store"
-        ls store
-        chmod +x ./run.sh
         ./run.sh --dry
 
     - name: "post thread wet run"
@@ -69,7 +62,6 @@ jobs:
         token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
       run: |
-        echo github.event.push
         chmod +x ./run.sh
         ./run.sh
 

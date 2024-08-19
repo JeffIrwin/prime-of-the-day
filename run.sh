@@ -24,13 +24,16 @@ done
 #echo "user_id = ${user_id:0:3}********"
 #echo "token = ${token:0:3}********"
 
+#===============================================================================
+
 # you can save secrets in secrets.sh for local testing and source it above. here
 # are some example dummy contents of such a file:
 #
 #     #!/usr/bin/env bash
 #
-#     export token=ABC123abc           # should be ~187 chars
-#     export user_id=8070318659720523  # should be ~16 chars
+#     export token=ABC123abc           # threads access token, ~187 chars
+#     export user_id=8070318659720523  # threads user id, ~16 chars
+#     export GH_PA_TOKEN=ghp_abc123    # github personal access token, ~65 chars
 #
 # to get your access token, go here:
 #
@@ -78,13 +81,10 @@ text="$prime"
 fg_color="#66ddaa"
 bg_color="#114499"
 mg_color="#5588cc" # margin
-#fg_color="#88eecc"
-#bg_color="#112277"
-#mg_color="#5588cc" # margin
 
-# use imagemagick (`convert`) to make an image of given `label` text.  threads
-# api has a maximum image width of 1440 pixels, so use 1100 here (700 + 2 * (100
-# + 100) including content plus borders)
+# use imagemagick (`convert`) to make an image of text.  threads api has a
+# maximum image width of 1440 pixels, so use 1100 here (700 + 2 * (100 + 100),
+# including content plus borders)
 #
 # TODO: randomize colors? or at least cycle between several presets
 #
@@ -100,22 +100,20 @@ convert \
 	-bordercolor "$bg_color" -border 100x100 \
 	-bordercolor "$mg_color" -border 100x100 \
 	"$image_file"
-#-pointsize 140 \
-#-bordercolor "$bg_color" -border 50x50 \
-#-bordercolor "$mg_color" -border 50x50 \
 
 GH_USER=JeffIrwin
+subdir="prime-of-the-day"
 
 # push the image to github. all threads image posts must have a public image
 # url, so it needs to be uploaded somewhere else before posting on threads
 set -x
 ls -ltrh "$image_file"
-mkdir -p store/prime-of-the-day/
-mv "$image_file" store/prime-of-the-day/
+mkdir -p store/$subdir/
+mv "$image_file" store/$subdir/
 pushd store
 git status
 git log -1
-git add ./prime-of-the-day/
+git add ./$subdir/
 git config --unset-all http.https://github.com/.extraheader || true
 git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
@@ -136,7 +134,7 @@ url="https://graph.threads.net/v1.0"
 #
 #     https://raw.githubusercontent.com/JeffIrwin/store/4dff2a34a63f0d4750a8e5d4a6e739595bc4564c/prime-of-the-day/prime.png
 #
-image_url="https://raw.githubusercontent.com/$GH_USER/store/$store_hash/prime-of-the-day/$image_file"
+image_url="https://raw.githubusercontent.com/$GH_USER/store/$store_hash/$subdir/$image_file"
 echo "image_url = $image_url"
 
 ## TODO: put this into production and move it after the dry run exit, remove
@@ -155,7 +153,6 @@ echo "image_url = $image_url"
 #	"$url/$user_id/threads_publish" \
 #	-d "creation_id=$creation_id" \
 #	-d "access_token=$token"
-##-d "image_url=https://raw.githubusercontent.com/JeffIrwin/store/main/prime-of-the-day/prime.png" \
 
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
@@ -173,13 +170,9 @@ response=$(curl -i -X POST \
 	-d "text=$text" \
 	-d "access_token=$token")
 
-#echo "response = $response"
-
 creation_id=$(echo $response \
 	| grep -o '{"id":.*}' \
 	| grep -o "[0-9]*")
-
-#echo "creation_id = $creation_id"
 
 # publish the post
 curl -i -X POST \
