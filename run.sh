@@ -6,7 +6,6 @@ set -e
 # Default arguments
 dry_run="false"
 
-pos=0
 while test $# -gt 0 ; do
 	#echo "$1"
 
@@ -76,21 +75,36 @@ echo "prime = $prime"
 # set the text payload to be posted
 text="$prime"
 
-# test out an idea here: use imagemagick (`convert`) to make an image of given
-# `label` text
+fg_color="#66ddaa"
+bg_color="#114499"
+mg_color="#5588cc" # margin
+#fg_color="#88eecc"
+#bg_color="#112277"
+#mg_color="#5588cc" # margin
+
+# use imagemagick (`convert`) to make an image of given `label` text.  threads
+# api has a maximum image width of 1440 pixels, so use 1100 here (700 + 2 * (100
+# + 100) including content plus borders)
 #
-# TODO: use actualy prime number as label text. randomize colors
+# TODO: randomize colors? or at least cycle between several presets
+#
 image_file="prime.png"
 which convert
-sudo apt-get install -y gsfonts
 #convert -list font
+#text="1,047,491"
 convert \
-	-background "#114499" \
-	-fill "#66ddaa" \
-	-pointsize 72 label:"69,420" \
-	-bordercolor "#114499" -border 50x50 \
-	-bordercolor "#5588cc" -border 50x50 \
+	-background "$bg_color" \
+	-fill "$fg_color" \
+	-size 700x \
+	label:"$text" \
+	-bordercolor "$bg_color" -border 100x100 \
+	-bordercolor "$mg_color" -border 100x100 \
 	"$image_file"
+#-pointsize 140 \
+#-bordercolor "$bg_color" -border 50x50 \
+#-bordercolor "$mg_color" -border 50x50 \
+
+GH_USER=JeffIrwin
 
 # push the image to github. all threads image posts must have a public image
 # url, so it needs to be uploaded somewhere else before posting on threads
@@ -102,28 +116,37 @@ pushd store
 git status
 git log -1
 git add ./prime-of-the-day/
-git config --unset-all http.https://github.com/.extraheader
+git config --unset-all http.https://github.com/.extraheader || true
 git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
 git commit -am "auto ci/cd commit from prime-of-the-day"
 git remote -v
 #git push
 echo "GH_PA_TOKEN = ${GH_PA_TOKEN:0:3}********"
-#git push --set-upstream https://user:$GH_PA_TOKEN@github.com/JeffIrwin/store main
-git push --prune https://token:$GH_PA_TOKEN@github.com/JeffIrwin/store
+#git push --set-upstream https://user:$GH_PA_TOKEN@github.com/$GH_USER/store main
+git push --prune https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+store_hash=$(git rev-parse HEAD)  # commit hash in store repo
 popd  # from store
 set +x
 
 url="https://graph.threads.net/v1.0"
 
-## TODO: set text, parameterize image url.  put this into production and move it
-## after the dry run exit, remove the plain text post
-#image_text="please ignore this test"
+# use permalink url. i've seen github not update immediately on "main" branch
+# even after push. e.g.
+#
+#     https://raw.githubusercontent.com/JeffIrwin/store/4dff2a34a63f0d4750a8e5d4a6e739595bc4564c/prime-of-the-day/prime.png
+#
+image_url="https://raw.githubusercontent.com/$GH_USER/store/$store_hash/prime-of-the-day/$image_file"
+echo "image_url = $image_url"
+
+## TODO: put this into production and move it after the dry run exit, remove
+## the plain text post.
+#
 #response=$(curl -i -X POST \
 #	"$url/$user_id/threads" \
 #	-d "media_type=IMAGE" \
-#	-d "image_url=https://raw.githubusercontent.com/JeffIrwin/store/main/prime-of-the-day/prime.png" \
-#	-d "text=$image_text" \
+#	-d "image_url=$image_url" \
+#	-d "text=$text" \
 #	-d "access_token=$token")
 #creation_id=$(echo $response \
 #	| grep -o '{"id":.*}' \
@@ -132,6 +155,7 @@ url="https://graph.threads.net/v1.0"
 #	"$url/$user_id/threads_publish" \
 #	-d "creation_id=$creation_id" \
 #	-d "access_token=$token"
+##-d "image_url=https://raw.githubusercontent.com/JeffIrwin/store/main/prime-of-the-day/prime.png" \
 
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
