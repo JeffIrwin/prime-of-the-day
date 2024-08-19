@@ -111,7 +111,7 @@ image_text="please ignore this test"
 response=$(curl -i -X POST \
 	"$url/$user_id/threads" \
 	-d "media_type=IMAGE" \
-	-d "image_url=https://github.com/JeffIrwin/store/blob/main/prime-of-the-day/prime.png" \
+	-d "image_url=https://raw.githubusercontent.com/JeffIrwin/store/main/prime-of-the-day/prime.png" \
 	-d "text=$image_text" \
 	-d "access_token=$token")
 creation_id=$(echo $response \
