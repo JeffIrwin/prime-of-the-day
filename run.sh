@@ -114,15 +114,13 @@ pushd store
 git status
 git log -1
 git add ./$subdir/
-git config --unset-all http.https://github.com/.extraheader || true
+git config --unset-all http.https://github.com/.extraheader || true  # fails locally
 git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
 git commit -am "auto ci/cd commit from prime-of-the-day"
 git remote -v
-#git push
-echo "GH_PA_TOKEN = ${GH_PA_TOKEN:0:3}********"
-#git push --set-upstream https://user:$GH_PA_TOKEN@github.com/$GH_USER/store main
-git push --prune https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+#git push --prune https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
 store_hash=$(git rev-parse HEAD)  # commit hash in store repo
 popd  # from store
 set +x

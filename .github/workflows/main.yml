@@ -31,9 +31,7 @@ jobs:
       run: |
         date
         git log -1
-        #echo "event schedule = ${{ github.event.schedule }} " # blank
-        #echo "event push     = ${{ github.event.push }} "     # blank
-        #echo "event          = ${{ github.event      }} "     # "Object"
+        echo "event name = ${{ github.event_name }} "
 
     - name: "clone store"
       uses: actions/checkout@v4
