@@ -68,6 +68,8 @@ text="$prime"
 
 # test out an idea here: use imagemagick (`convert`) to make an image of given
 # `label` text
+#
+# TODO: use actualy prime number as label text. randomize colors
 image_file="prime.png"
 which convert
 sudo apt-get install -y gsfonts
@@ -80,6 +82,8 @@ convert \
 	-bordercolor "#5588cc" -border 50x50 \
 	"$image_file"
 
+# push the image to github. all threads image posts must have a public image
+# url, so it needs to be uploaded somewhere else before posting on threads
 set -x
 ls -ltrh "$image_file"
 mkdir -p store/prime-of-the-day/
@@ -99,6 +103,22 @@ echo "GH_PA_TOKEN = ${GH_PA_TOKEN:0:3}********"
 git push --prune https://token:$GH_PA_TOKEN@github.com/JeffIrwin/store
 popd  # from store
 set +x
+
+# TODO: parameterize image url.  also might need "raw" github url
+image_text="please ignore this test"
+response=$(curl -i -X POST \
+	"$url/$user_id/threads" \
+	-d "media_type=IMAGE" \
+	-d "image_url=https://github.com/JeffIrwin/store/blob/main/prime-of-the-day/prime.png"
+	-d "text=$image_text" \
+	-d "access_token=$token")
+creation_id=$(echo $response \
+	| grep -o '{"id":.*}' \
+	| grep -o "[0-9]*")
+curl -i -X POST \
+	"$url/$user_id/threads_publish" \
+	-d "creation_id=$creation_id" \
+	-d "access_token=$token"
 
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
