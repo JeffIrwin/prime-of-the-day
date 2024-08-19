@@ -49,14 +49,24 @@ done
 # really you only need the `id`, but it's nice to show how to get the
 # `username`, `name`, etc. too.
 #
-# TODO: include links to meta help docs, random blogs, etc.
-#
 # for automated github actions, these secrets are stored as github secrets and
 # injected into environment variables in main.yml
-
-# image posting example:
 #
-#     curl -i -X POST "https://graph.threads.net/v1.0/USER_ID/threads" -d "media_type=IMAGE" -d "image_url=https://www.jeffirwin.xyz/favicon.png" -d "text=#BronzFonz" -d "access_token=TOKEN"
+# for more help, see these resources:
+#
+#   - https://developers.facebook.com/docs/threads/posts
+#   - https://developers.facebook.com/docs/instagram-basic-display-api/overview/#user-token-generator
+#   - https://github.com/fbsamples/threads_api
+#   - https://blog.disane.dev/en/threads-api-is-here/
+#   - https://blog.nevinpjohn.in/posts/threads-api-public-authentication/
+#
+# a key difference that i took from some of the resources above is that i
+# couldn't figure out how to get an access code. those blogs then exchanged the
+# access code for a short-lived access token, and then exchanged the short-lived
+# access token for a long-lived access token. it seems a lot easier to me to
+# simply directly generate a long-lived access token on developers.facebook.com
+
+#===============================================================================
 
 # get a prime number
 g++ -o main main.cpp
@@ -106,21 +116,22 @@ set +x
 
 url="https://graph.threads.net/v1.0"
 
-# TODO: parameterize image url.  also might need "raw" github url
-image_text="please ignore this test"
-response=$(curl -i -X POST \
-	"$url/$user_id/threads" \
-	-d "media_type=IMAGE" \
-	-d "image_url=https://raw.githubusercontent.com/JeffIrwin/store/main/prime-of-the-day/prime.png" \
-	-d "text=$image_text" \
-	-d "access_token=$token")
-creation_id=$(echo $response \
-	| grep -o '{"id":.*}' \
-	| grep -o "[0-9]*")
-curl -i -X POST \
-	"$url/$user_id/threads_publish" \
-	-d "creation_id=$creation_id" \
-	-d "access_token=$token"
+## TODO: set text, parameterize image url.  put this into production and move it
+## after the dry run exit, remove the plain text post
+#image_text="please ignore this test"
+#response=$(curl -i -X POST \
+#	"$url/$user_id/threads" \
+#	-d "media_type=IMAGE" \
+#	-d "image_url=https://raw.githubusercontent.com/JeffIrwin/store/main/prime-of-the-day/prime.png" \
+#	-d "text=$image_text" \
+#	-d "access_token=$token")
+#creation_id=$(echo $response \
+#	| grep -o '{"id":.*}' \
+#	| grep -o "[0-9]*")
+#curl -i -X POST \
+#	"$url/$user_id/threads_publish" \
+#	-d "creation_id=$creation_id" \
+#	-d "access_token=$token"
 
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
