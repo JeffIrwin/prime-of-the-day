@@ -110,7 +110,7 @@ mkdir -p store/$subdir/
 mv "$image_file" store/$subdir/
 pushd store
 git add ./$subdir/
-#git config --unset-all http.https://github.com/.extraheader || true  # fails locally
+git config --unset-all http.https://github.com/.extraheader || true  # fails locally
 git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
 git commit -am "auto ci/cd commit from prime-of-the-day"
