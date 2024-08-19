@@ -104,6 +104,8 @@ git push --prune https://token:$GH_PA_TOKEN@github.com/JeffIrwin/store
 popd  # from store
 set +x
 
+url="https://graph.threads.net/v1.0"
+
 # TODO: parameterize image url.  also might need "raw" github url
 image_text="please ignore this test"
 response=$(curl -i -X POST \
@@ -125,8 +127,6 @@ if [[ "$dry_run" == "true" ]] ; then
 	exit 0
 fi
 echo "wet run"
-
-url="https://graph.threads.net/v1.0"
 
 # posting consists of two steps.  first create a container, then publish it
 
