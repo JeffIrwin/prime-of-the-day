@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on:
   push:
@@ -33,14 +33,6 @@ jobs:
         git log -1
         echo "event name = ${{ github.event_name }} "
 
-    - name: "test schedule"
-      if: github.event_name == 'schedule'
-      run: echo "schedule"
-
-    - name: "test not schedule"
-      if: github.event_name != 'schedule'
-      run: echo "not schedule"
-
     - name: "clone store"
       uses: actions/checkout@v4
       with:
@@ -54,17 +46,17 @@ jobs:
 
     - name: "post thread dry run"
       if: github.event_name != 'schedule'
-      #if: github.event.schedule != '17 9 * * *'
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
       run: |
+        g++ -o main main.cpp
+        ./main --test  # unit tests
         ./run.sh --dry
 
     - name: "post thread wet run"
       if: github.event_name == 'schedule'
-      #if: github.event.schedule == '17 9 * * *'
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
