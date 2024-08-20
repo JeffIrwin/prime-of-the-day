@@ -70,6 +70,9 @@ done
 
 #===============================================================================
 
+# get state header from store repo
+cp store/prime-of-the-day/state.h .
+
 # get a prime number
 g++ -o main main.cpp
 prime=$(./main | tail -1)
@@ -113,7 +116,7 @@ git add ./$subdir/
 git config --unset-all http.https://github.com/.extraheader || true  # fails locally
 git config --global user.email "jirwin505@gmail.com"
 git config --global user.name "Jeff Irwin"
-git commit -am "auto ci/cd commit from prime-of-the-day"
+git commit -am "auto image commit from prime-of-the-day"
 git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
 store_hash=$(git rev-parse HEAD)  # commit hash in store repo
 popd  # from store
@@ -144,6 +147,29 @@ echo "image_url = $image_url"
 #	"$url/$user_id/threads_publish" \
 #	-d "creation_id=$creation_id" \
 #	-d "access_token=$token"
+
+#****************
+
+# read a number from a state header file, increment it, and write it back to the
+# file in place
+#
+# TODO: move after dry run, to very end. if any step fails, don't increment
+
+#state_file="state.h"
+state_file="store/prime-of-the-day/state.h"
+count=$(grep -o '\<[0-9]*\>' "$state_file")
+((count+=1))
+echo $count
+
+sed -i "s/\<[0-9]*\>/$count/" "$state_file"
+
+pushd store
+git add ./$subdir/
+git commit -am "auto state commit from prime-of-the-day"
+git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+popd  # from store
+
+#****************
 
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"

@@ -1,16 +1,11 @@
 
-#include <chrono>
+//#include <chrono>
 #include <iostream>
 #include <stdio.h>
 #include <string>
 #include <vector>
 
-// if you have g++ 13 or another compiler with c++ 20 support, you can do date
-// calculations without this dependency. my ubuntu only has g++ 11 :(
-//
-// ref:  https://stackoverflow.com/a/31928010/4347028
-//
-#include "date.h"
+#include "state.h"
 
 size_t nth_prime_number(size_t n)
 {
@@ -92,26 +87,7 @@ int main()
 	//std::cerr << comma_delim(12345678912) << "\n";
 	//std::cerr << comma_delim(123456789123) << "\n";
 
-	// TODO: the date stuff is hacky, it might fail due to time zones, and if i
-	// miss a day (e.g. if one of several tokens expires), numbers will get
-	// skipped.  instead, cache state (i.e. n) in `store` repo (which i have to
-	// use anyway to post a png image) and then use that to get nth prime
-
-	using namespace date;
-	using namespace std::chrono;
-
-	auto today = floor<days>(system_clock::now());
-
-	// this is the day before i started posting.  post 2 on the first day, 3 and
-	// the second, ...
-	auto day_zero = 2024_y/8/16;
-	//auto day_zero = 2021_y/4/6;
-	//auto day_zero = 1800_y/4/6;
-
-	std::cerr << "zero  = " << day_zero << '\n';
-	std::cerr << "today = " << today    << '\n';
-
-	auto days = (sys_days{today} - sys_days{day_zero}).count();
+	auto days = PRIME_STATE_COUNT;
 	std::cerr << "days = " << days << " days\n";
 
 	// log nothing else after this.  the run.sh script will pickup the last line

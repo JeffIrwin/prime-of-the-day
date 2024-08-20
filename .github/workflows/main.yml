@@ -53,7 +53,8 @@ jobs:
         sudo apt-get install -y gsfonts  # needed by imagemagick's `convert`
 
     - name: "post thread dry run"
-      if: github.event.schedule != '17 9 * * *'
+      if: github.event_name != 'schedule'
+      #if: github.event.schedule != '17 9 * * *'
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
@@ -62,7 +63,8 @@ jobs:
         ./run.sh --dry
 
     - name: "post thread wet run"
-      if: github.event.schedule == '17 9 * * *'
+      if: github.event_name == 'schedule'
+      #if: github.event.schedule == '17 9 * * *'
       env:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}

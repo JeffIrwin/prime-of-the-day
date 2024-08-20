@@ -1,6 +1,7 @@
 
 main
 secrets.sh
+state.h
 
 scratch/
 store/
