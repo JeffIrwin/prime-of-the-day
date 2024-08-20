@@ -19,7 +19,7 @@ threads.
 The prime number generation is done in a short C++ program.
 
 The more interesting part is the bash script which posts the prime to
-[threads](threads.net) using the [threads
+[threads](www.threads.net) using the [threads
 API](https://developers.facebook.com/docs/threads/), and the github actions yaml
 config file which runs everything on a schedule once a day.
 
