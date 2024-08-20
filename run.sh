@@ -187,7 +187,7 @@ count=$(grep -o '\<[0-9]*\>' "$state_file")
 #echo "count = $count"
 
 sed -i "s/\<[0-9]*\>/$count/" "$state_file"
- 
+
 pushd store
 git add ./$subdir/
 git commit -am "auto state commit from prime-of-the-day"
