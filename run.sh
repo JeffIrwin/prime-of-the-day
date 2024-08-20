@@ -155,7 +155,6 @@ echo "image_url = $image_url"
 #
 # TODO: move after dry run, to very end. if any step fails, don't increment
 
-#state_file="state.h"
 state_file="store/prime-of-the-day/state.h"
 count=$(grep -o '\<[0-9]*\>' "$state_file")
 ((count+=1))
