@@ -16,7 +16,7 @@ This is a bit of an exercise in ci/cd orchestration, but nothing particularly
 interesting.  In short, this repo generates prime numbers and posts them to
 threads.
 
-The prime number generation is done in a short C++ program.
+The prime number generation is done in a short C++ program, [main.cpp](main.cpp).
 
 The more interesting part is the bash script which posts the prime to
 [threads](https://www.threads.net) using the [threads
