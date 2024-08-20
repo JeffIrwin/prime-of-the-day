@@ -7,10 +7,11 @@
 #include "state.h"
 
 // ANSI escape codes
-const std::string GREEN  = "\033[92m";   // bright green
-const std::string RED    = "\033[91;1m"; // bold bright red
-const std::string YELLOW = "\033[33m";
-const std::string RESET  = "\033[0m";
+const std::string GREEN   = "\033[92m";   // bright green
+const std::string MAGENTA = "\033[95m";   // bright
+const std::string RED     = "\033[91;1m"; // bold bright
+const std::string YELLOW  = "\033[33m";
+const std::string RESET   = "\033[0m";
 
 size_t nth_prime_number(size_t n)
 {
@@ -68,7 +69,11 @@ std::string comma_delim(size_t n)
 
 size_t unit_tests()
 {
-	// TODO: run during "push" ci/cd (but not "schedule")
+	std::cout
+		<< MAGENTA
+		<< "Running prime-of-the-day unit tests ...\n"
+		<< RESET;
+
 	size_t nfail  = 0;
 	size_t ntests = 0;
 
@@ -115,7 +120,7 @@ size_t unit_tests()
 	TEST(nth_prime_number(7) == 17);
 
 	TEST(nth_prime_number(100) == 541);
-	TEST(nth_prime_number(1000) == 7919);
+	TEST(nth_prime_number(1001) == 7919);
 	TEST(nth_prime_number(10000) == 104729);
 	TEST(nth_prime_number(10001) == 104743);
 	TEST(nth_prime_number(10002) == 104759);
