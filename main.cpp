@@ -7,7 +7,8 @@
 #include "state.h"
 
 // ANSI escape codes
-const std::string RED    = "\033[31m";
+const std::string GREEN  = "\033[92m";   // bright green
+const std::string RED    = "\033[91;1m"; // bold bright red
 const std::string YELLOW = "\033[33m";
 const std::string RESET  = "\033[0m";
 
@@ -67,35 +68,67 @@ std::string comma_delim(size_t n)
 
 size_t unit_tests()
 {
-	size_t nfail = 0;
+	// TODO: run during "push" ci/cd (but not "schedule")
+	size_t nfail  = 0;
+	size_t ntests = 0;
 
-	// TODO: refactor as bool array
+	#define TEST(x) \
+		ntests += 1; \
+		if (!(x)) \
+		{ \
+			nfail++; \
+			std::cerr \
+				<< RED \
+				<< "Error: test failure at line " << __LINE__ \
+				<< " in file \"" << __FILE__ << "\"\n" \
+				<< RESET; \
+		}
 
-	if (comma_delim(1) != "1") nfail++;
-	if (comma_delim(12) != "12") nfail++;
-	if (comma_delim(123) != "123") nfail++;
+	//********
 
-	if (comma_delim(1234) != "1234") nfail++;
-	if (comma_delim(12345) != "12,345") nfail++;
-	if (comma_delim(123456) != "123,456") nfail++;
+	TEST(comma_delim(1) == "1");
 
-	if (comma_delim(1234567) != "1,234,567") nfail++;
-	if (comma_delim(12345678) != "12,345,678") nfail++;
-	if (comma_delim(123456789) != "123,456,789") nfail++;
+	TEST(comma_delim(12) == "12");
+	TEST(comma_delim(123) == "123");
 
-	if (comma_delim(1234567891) != "1,234,567,891") nfail++;
-	if (comma_delim(12345678912) != "12,345,678,912") nfail++;
-	if (comma_delim(123456789123) != "123,456,789,123") nfail++;
+	TEST(comma_delim(1234) == "1234");
+	TEST(comma_delim(12345) == "12,345");
+	TEST(comma_delim(123456) == "123,456");
 
-	// TODO: log if failure.  run during "push" ci/cd (but not "schedule")
+	TEST(comma_delim(1234567) == "1,234,567");
+	TEST(comma_delim(12345678) == "12,345,678");
+	TEST(comma_delim(123456789) == "123,456,789");
 
-	// TODO: also cover nth_prime_number()
+	TEST(comma_delim(1234567891) == "1,234,567,891");
+	TEST(comma_delim(12345678912) == "12,345,678,912");
+	TEST(comma_delim(123456789123) == "123,456,789,123");
 
-	// TODO: log green if no fails
-	if (nfail != 0)
+	//********
+
+	TEST(nth_prime_number(0) == 2);
+	TEST(nth_prime_number(1) == 2);
+	TEST(nth_prime_number(2) == 3);
+	TEST(nth_prime_number(3) == 5);
+	TEST(nth_prime_number(4) == 7);
+	TEST(nth_prime_number(5) == 11);
+	TEST(nth_prime_number(6) == 13);
+	TEST(nth_prime_number(7) == 17);
+
+	TEST(nth_prime_number(100) == 541);
+	TEST(nth_prime_number(1000) == 7919);
+	TEST(nth_prime_number(10000) == 104729);
+	TEST(nth_prime_number(10001) == 104743);
+	TEST(nth_prime_number(10002) == 104759);
+
+	if (nfail == 0)
+		std::cout
+			<< GREEN
+			<< "All " << ntests << " tests passed!\n"
+			<< RESET;
+	else
 		std::cerr
 			<< RED
-			<< "Error: " << nfail << " unit test(s) failed\n"
+			<< "Error: " << nfail << " / " << ntests << " unit test(s) failed\n"
 			<< RESET;
 
 	return nfail;
