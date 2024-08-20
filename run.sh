@@ -148,28 +148,6 @@ echo "image_url = $image_url"
 #	-d "creation_id=$creation_id" \
 #	-d "access_token=$token"
 
-#****************
-
-# read a number from a state header file, increment it, and write it back to the
-# file in place
-#
-# TODO: move after dry run, to very end. if any step fails, don't increment
- 
-state_file="store/prime-of-the-day/state.h"
-count=$(grep -o '\<[0-9]*\>' "$state_file")
-((count+=1))
-echo $count
-
-sed -i "s/\<[0-9]*\>/$count/" "$state_file"
-
-pushd store
-git add ./$subdir/
-git commit -am "auto state commit from prime-of-the-day"
-git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
-popd  # from store
-
-#****************
-
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
 	exit 0
@@ -197,4 +175,22 @@ curl -i -X POST \
 	-d "access_token=$token"
 
 echo
+
+#****************
+
+# read a number from the state header file, increment it, and write it back to
+# the file in place
+
+state_file="store/prime-of-the-day/state.h"
+count=$(grep -o '\<[0-9]*\>' "$state_file")
+((count+=1))
+#echo "count = $count"
+
+sed -i "s/\<[0-9]*\>/$count/" "$state_file"
+
+pushd store
+git add ./$subdir/
+git commit -am "auto state commit from prime-of-the-day"
+git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+popd  # from store
 
