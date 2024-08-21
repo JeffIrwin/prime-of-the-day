@@ -46,7 +46,7 @@ I had a couple other ideas for how to manage state.  Initially I hard-coded the
 date of the day before I started posting and subtracted that from the current
 date.  This isn't perfect and it adds dependency on a date library.  What
 happens if I have an outage and miss a day?  What happens if, since github
-actions run in UTC, daylight savings throws things off by an hour and that
+actions run in UTC, daylight saving throws things off by an hour and that
 happens to be just enough to throw the calculation off by a day?
 
 Another idea was to use the github build number for my state.  This would have
