@@ -196,9 +196,16 @@ mg_color="#e6ccb2" # margin
 #
 image_file="prime.png"
 which convert
-#convert -list font
-#text="1,047,491"
 convert --version
+echo
+echo "full fonts"
+echo
+convert -list font
+echo
+echo "filtered fonts"
+echo
+convert -list font | grep 'Font'
+#text="1,047,491"
 convert \
 	-background "$bg_color" \
 	-fill "$fg_color" \
