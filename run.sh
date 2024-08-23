@@ -206,6 +206,7 @@ which convert
 #echo
 #convert -list font | grep 'Font'
 #text="1,047,491"
+#text="1,023,456,789"
 
 font="Times-Bold"
 font="Helvetica"
@@ -215,6 +216,10 @@ font="fonts/cormorant-garamond/CormorantGaramond-Regular.ttf"
 #font="fonts/computer-modern/cmunrm.ttf"
 
 # order of cmd args matters.  font must be *before* label
+#
+# "trim" crops based on content which is helpful for fonts with more space at
+# top than bottom
+#
 convert \
 	-background "$bg_color" \
 	-fill "$fg_color" \
@@ -222,6 +227,7 @@ convert \
 	-font "$font" \
 	label:"$text" \
 	-gravity center \
+	-trim \
 	-bordercolor "$bg_color" -border 100x100 \
 	-bordercolor "$mg_color" -border 100x100 \
 	"$image_file"
