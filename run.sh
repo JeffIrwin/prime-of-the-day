@@ -198,6 +198,7 @@ image_file="prime.png"
 which convert
 #convert -list font
 #text="1,047,491"
+convert --version
 convert \
 	-background "$bg_color" \
 	-fill "$fg_color" \
@@ -207,6 +208,7 @@ convert \
 	-bordercolor "$bg_color" -border 100x100 \
 	-bordercolor "$mg_color" -border 100x100 \
 	"$image_file"
+#exit 0
 
 GH_USER=JeffIrwin
 subdir="prime-of-the-day"
