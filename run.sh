@@ -203,6 +203,7 @@ convert \
 	-fill "$fg_color" \
 	-size 700x \
 	label:"$text" \
+	-gravity center \
 	-bordercolor "$bg_color" -border 100x100 \
 	-bordercolor "$mg_color" -border 100x100 \
 	"$image_file"
