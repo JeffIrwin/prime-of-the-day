@@ -196,26 +196,35 @@ mg_color="#e6ccb2" # margin
 #
 image_file="prime.png"
 which convert
-convert --version
-echo
-echo "full fonts"
-echo
-convert -list font
-echo
-echo "filtered fonts"
-echo
-convert -list font | grep 'Font'
+#convert --version
+#echo
+#echo "full fonts"
+#echo
+#convert -list font
+#echo
+#echo "filtered fonts"
+#echo
+#convert -list font | grep 'Font'
 #text="1,047,491"
+
+font="Times-Bold"
+font="Helvetica"
+font="DejaVu-Sans"
+font="Candice"
+font="fonts/cormorant-garamond/CormorantGaramond-Regular.ttf"
+#font="fonts/computer-modern/cmunrm.ttf"
+
+# order of cmd args matters.  font must be *before* label
 convert \
 	-background "$bg_color" \
 	-fill "$fg_color" \
 	-size 700x \
+	-font "$font" \
 	label:"$text" \
 	-gravity center \
 	-bordercolor "$bg_color" -border 100x100 \
 	-bordercolor "$mg_color" -border 100x100 \
 	"$image_file"
-#exit 0
 
 GH_USER=JeffIrwin
 subdir="prime-of-the-day"

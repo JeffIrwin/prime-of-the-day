@@ -40,9 +40,9 @@ jobs:
         ref: main
         path: "./store"
 
-    - name: "install tools"
-      run: |
-        sudo apt-get install -y gsfonts  # needed by imagemagick's `convert`
+    #- name: "install tools"
+    #  run: |
+    #    sudo apt-get install -y gsfonts  # needed by imagemagick's `convert`
 
     - name: "post thread dry run"
       if: github.event_name != 'schedule'
