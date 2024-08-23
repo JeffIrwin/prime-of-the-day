@@ -110,7 +110,7 @@ size_t unit_tests()
 
 	//********
 
-	TEST(nth_prime_number(0) == 2);
+	TEST(nth_prime_number(0) == 2); // not really defined but at least it shouldn't crash
 	TEST(nth_prime_number(1) == 2);
 	TEST(nth_prime_number(2) == 3);
 	TEST(nth_prime_number(3) == 5);
