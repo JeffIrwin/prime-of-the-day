@@ -191,27 +191,13 @@ mg_color="#e6ccb2" # margin
 # use imagemagick (`convert`) to make an image of text.  threads api has a
 # maximum image width of 1440 pixels, so use 1100 here (700 + 2 * (100 + 100),
 # including content plus borders)
-#
-# TODO: randomize colors? or at least cycle between several presets
-#
-image_file="prime.png"
-which convert
-#convert --version
-#echo
-#echo "full fonts"
-#echo
-#convert -list font
-#echo
-#echo "filtered fonts"
-#echo
-#convert -list font | grep 'Font'
-#text="1,047,491"
-#text="1,023,456,789"
 
-font="Times-Bold"
-font="Helvetica"
-font="DejaVu-Sans"
-font="Candice"
+image_file="prime.png"
+#which convert
+#convert --version
+#convert -list font
+#text="1,047,491"
+
 font="fonts/cormorant-garamond/CormorantGaramond-Regular.ttf"
 #font="fonts/computer-modern/cmunrm.ttf"
 
@@ -226,7 +212,6 @@ convert \
 	-size 700x \
 	-font "$font" \
 	label:"$text" \
-	-gravity center \
 	-trim \
 	-bordercolor "$bg_color" -border 100x100 \
 	-bordercolor "$mg_color" -border 100x100 \
