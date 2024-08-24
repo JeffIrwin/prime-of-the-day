@@ -283,7 +283,7 @@ echo "image_url = $image_url"
 
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
-	#exit 0  # TODO
+	exit 0
 fi
 echo "wet run"
 
