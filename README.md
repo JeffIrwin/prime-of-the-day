@@ -7,7 +7,6 @@ a new prime number, every day on threads [@prime_of_the_day](https://www.threads
 
 - curl
 - g++
-- gsfonts
 - imagemagick
 
 ## Description
