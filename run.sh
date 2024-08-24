@@ -288,7 +288,7 @@ fi
 echo "wet run"
 
 type="text"
-type="image"
+#type="image"
 
 if [[ "$type" == "text" ]] ; then
 
