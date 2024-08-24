@@ -234,7 +234,7 @@ image_file="prime.png"
 #convert --version
 #convert -list font
 #text="1,047,491"
-
+ 
 font="fonts/cormorant-garamond/CormorantGaramond-Regular.ttf"
 #font="fonts/computer-modern/cmunrm.ttf"
 
