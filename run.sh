@@ -222,7 +222,7 @@ elif [[ "$ipalette" == "18" ]] ; then
 
 else
 	echo -e "\e[91;1mError: bad palette index\e[0m"
-
+	exit -1
 fi
 
 # use imagemagick (`convert`) to make an image of text.  threads api has a
@@ -234,7 +234,7 @@ image_file="prime.png"
 #convert --version
 #convert -list font
 #text="1,047,491"
- 
+
 font="fonts/cormorant-garamond/CormorantGaramond-Regular.ttf"
 #font="fonts/computer-modern/cmunrm.ttf"
 
@@ -281,48 +281,57 @@ url="https://graph.threads.net/v1.0"
 image_url="https://raw.githubusercontent.com/$GH_USER/store/$store_hash/$subdir/$image_file"
 echo "image_url = $image_url"
 
-## TODO: put this into production and move it after the dry run exit, remove
-## the plain text post.
-#
-#response=$(curl -i -X POST \
-#	"$url/$user_id/threads" \
-#	-d "media_type=IMAGE" \
-#	-d "image_url=$image_url" \
-#	-d "text=$text" \
-#	-d "access_token=$token")
-#creation_id=$(echo $response \
-#	| grep -o '{"id":.*}' \
-#	| grep -o "[0-9]*")
-#curl -i -X POST \
-#	"$url/$user_id/threads_publish" \
-#	-d "creation_id=$creation_id" \
-#	-d "access_token=$token"
-
 if [[ "$dry_run" == "true" ]] ; then
 	echo "dry run"
-	exit 0
+	#exit 0  # TODO
 fi
 echo "wet run"
 
-# posting consists of two steps.  first create a container, then publish it
+type="text"
+type="image"
 
-# create a content container for the post and save the response which includes
-# its creation id
-response=$(curl -i -X POST \
-	"$url/$user_id/threads" \
-	-d "media_type=TEXT" \
-	-d "text=$text" \
-	-d "access_token=$token")
+if [[ "$type" == "text" ]] ; then
 
-creation_id=$(echo $response \
-	| grep -o '{"id":.*}' \
-	| grep -o "[0-9]*")
+	# posting consists of two steps.  first create a container, then publish it
 
-# publish the post
-curl -i -X POST \
-	"$url/$user_id/threads_publish" \
-	-d "creation_id=$creation_id" \
-	-d "access_token=$token"
+	# create a content container for the post and save the response which includes
+	# its creation id
+	response=$(curl -i -X POST \
+		"$url/$user_id/threads" \
+		-d "media_type=TEXT" \
+		-d "text=$text" \
+		-d "access_token=$token")
+
+	creation_id=$(echo $response \
+		| grep -o '{"id":.*}' \
+		| grep -o "[0-9]*")
+
+	# publish the post
+	curl -i -X POST \
+		"$url/$user_id/threads_publish" \
+		-d "creation_id=$creation_id" \
+		-d "access_token=$token"
+
+elif [[ "$type" == "image" ]] ; then
+
+	response=$(curl -i -X POST \
+		"$url/$user_id/threads" \
+		-d "media_type=IMAGE" \
+		-d "image_url=$image_url" \
+		-d "text=$text" \
+		-d "access_token=$token")
+	creation_id=$(echo $response \
+		| grep -o '{"id":.*}' \
+		| grep -o "[0-9]*")
+	curl -i -X POST \
+		"$url/$user_id/threads_publish" \
+		-d "creation_id=$creation_id" \
+		-d "access_token=$token"
+
+else
+	echo -e "\e[91;1mError: bad post type\e[0m"
+	exit -2
+fi
 
 echo
 
