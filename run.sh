@@ -13,7 +13,7 @@ while test $# -gt 0 ; do
 		dry_run="true"
 
 	else
-		echo -e "\e[33mwarning: unknown argument \"$1\" ignored\e[0m"
+		echo -e "\e[33mWarning: unknown argument \"$1\" ignored\e[0m"
 
 	fi
 
@@ -83,110 +83,147 @@ text="$prime"
 
 # i got most of these palettes from https://coolors.co/palettes/trending
 
-# green on blue
-fg_color="#66ddaa"
-bg_color="#114499"
-mg_color="#5588cc" # margin
+npalette=19
+ipalette=$(( $RANDOM % $npalette ))
+echo "ipalette = $ipalette"
 
-## blue on green (not good)
-#fg_color="#77ccee"
-#bg_color="#117733"
-#mg_color="#55cc88" # margin
+if [[ "$ipalette" == "0" ]] ; then
 
-# cream on brown
-fg_color="#fefae0"
-bg_color="#bc6c25"
-mg_color="#dda15e" # margin
+	# green on blue
+	fg_color="#66ddaa"
+	bg_color="#114499"
+	mg_color="#5588cc" # margin
 
-## cream on green (meh)
-#fg_color="#fefae0"
-#bg_color="#283618"
-#mg_color="#606c38" # margin
+elif [[ "$ipalette" == "1" ]] ; then
 
-# dark blue on light blue
-fg_color="#023047"
-bg_color="#8ecae6"
-mg_color="#219ebc" # margin
+	# cream on brown
+	fg_color="#fefae0"
+	bg_color="#bc6c25"
+	mg_color="#dda15e" # margin
 
-# dark blue on light blue
-fg_color="#8ecae6"
-bg_color="#023047"
-mg_color="#219ebc" # margin
+elif [[ "$ipalette" == "2" ]] ; then
 
-# light pink on dark pink
-fg_color="#ffe5ec"
-bg_color="#fb6f92"
-mg_color="#ff8fab" # margin
+	# dark blue on light blue
+	fg_color="#023047"
+	bg_color="#8ecae6"
+	mg_color="#219ebc" # margin
 
-# dark pink on light pink
-fg_color="#fb6f92"
-bg_color="#ffe5ec"
-mg_color="#ffc2d1" # margin
+elif [[ "$ipalette" == "3" ]] ; then
 
-# dark green on light green
-fg_color="#4ffb72"
-bg_color="#e5ffec"
-mg_color="#c2ffd1" # margin
+	# dark blue on light blue
+	fg_color="#8ecae6"
+	bg_color="#023047"
+	mg_color="#219ebc" # margin
 
-# dark blue on light blue
-fg_color="#6f92fb"
-bg_color="#e5ecff"
-mg_color="#c2d1ff" # margin
+elif [[ "$ipalette" == "4" ]] ; then
 
-# light blue on dark blue
-fg_color="#e5ecff"
-bg_color="#6f92fb"
-mg_color="#8fabff" # margin
+	# light pink on dark pink
+	fg_color="#ffe5ec"
+	bg_color="#fb6f92"
+	mg_color="#ff8fab" # margin
 
-# light green on dark green
-fg_color="#e5ffec"
-bg_color="#3fdb62"
-mg_color="#8fffab" # margin
+elif [[ "$ipalette" == "5" ]] ; then
 
-# gray on black (navy mg)
-fg_color="#e5e5e5"
-bg_color="#000000"
-mg_color="#14213d" # margin
+	# dark pink on light pink
+	fg_color="#fb6f92"
+	bg_color="#ffe5ec"
+	mg_color="#ffc2d1" # margin
 
-# light on dark blue
-fg_color="#caf0f8"
-bg_color="#03045e"
-mg_color="#0077b6" # margin
+elif [[ "$ipalette" == "6" ]] ; then
 
-# dark on light blue
-fg_color="#03045e"
-bg_color="#caf0f8"
-mg_color="#90e0ef" # margin
+	# dark green on light green
+	fg_color="#4ffb72"
+	bg_color="#e5ffec"
+	mg_color="#c2ffd1" # margin
 
-# light on dark green
-fg_color="#c7f9cc"
-bg_color="#22577a"
-mg_color="#38a3a5" # margin
+elif [[ "$ipalette" == "7" ]] ; then
 
-# dark on light green
-fg_color="#22577a"
-bg_color="#c7f9cc"
-mg_color="#80ed99" # margin
+	# dark blue on light blue
+	fg_color="#6f92fb"
+	bg_color="#e5ecff"
+	mg_color="#c2d1ff" # margin
 
-# light on dark blue grey
-fg_color="#e0e1dd"
-bg_color="#0d1b2a"
-mg_color="#1b263b" # margin
+elif [[ "$ipalette" == "8" ]] ; then
 
-# dark on light blue grey
-fg_color="#0d1b2a"
-bg_color="#e0e1dd"
-mg_color="#778da9" # margin
+	# light blue on dark blue
+	fg_color="#e5ecff"
+	bg_color="#6f92fb"
+	mg_color="#8fabff" # margin
 
-# light on dark brown
-fg_color="#ede0d4"
-bg_color="#7f5539"
-mg_color="#9c6644" # margin
+elif [[ "$ipalette" == "9" ]] ; then
 
-# dark on light brown
-fg_color="#7f5539"
-bg_color="#ede0d4"
-mg_color="#e6ccb2" # margin
+	# light green on dark green
+	fg_color="#e5ffec"
+	bg_color="#3fdb62"
+	mg_color="#8fffab" # margin
+
+elif [[ "$ipalette" == "10" ]] ; then
+
+	# gray on black (navy mg)
+	fg_color="#e5e5e5"
+	bg_color="#000000"
+	mg_color="#14213d" # margin
+
+elif [[ "$ipalette" == "11" ]] ; then
+
+	# light on dark blue
+	fg_color="#caf0f8"
+	bg_color="#03045e"
+	mg_color="#0077b6" # margin
+
+elif [[ "$ipalette" == "12" ]] ; then
+
+	# dark on light blue
+	fg_color="#03045e"
+	bg_color="#caf0f8"
+	mg_color="#90e0ef" # margin
+
+elif [[ "$ipalette" == "13" ]] ; then
+
+	# light on dark green
+	fg_color="#c7f9cc"
+	bg_color="#22577a"
+	mg_color="#38a3a5" # margin
+
+elif [[ "$ipalette" == "14" ]] ; then
+
+	# dark on light green
+	fg_color="#22577a"
+	bg_color="#c7f9cc"
+	mg_color="#80ed99" # margin
+
+elif [[ "$ipalette" == "15" ]] ; then
+
+	# light on dark blue grey
+	fg_color="#e0e1dd"
+	bg_color="#0d1b2a"
+	mg_color="#1b263b" # margin
+
+elif [[ "$ipalette" == "16" ]] ; then
+
+	# dark on light blue grey
+	fg_color="#0d1b2a"
+	bg_color="#e0e1dd"
+	mg_color="#778da9" # margin
+
+elif [[ "$ipalette" == "17" ]] ; then
+
+	# light on dark brown
+	fg_color="#ede0d4"
+	bg_color="#7f5539"
+	mg_color="#9c6644" # margin
+
+elif [[ "$ipalette" == "18" ]] ; then
+
+	# dark on light brown
+	fg_color="#7f5539"
+	bg_color="#ede0d4"
+	mg_color="#e6ccb2" # margin
+
+else
+	echo -e "\e[91;1mError: bad palette index\e[0m"
+
+fi
 
 # use imagemagick (`convert`) to make an image of text.  threads api has a
 # maximum image width of 1440 pixels, so use 1100 here (700 + 2 * (100 + 100),
