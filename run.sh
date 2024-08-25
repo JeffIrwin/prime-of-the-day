@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # `set -x` will leak secrets
-set -e
+set -eu
 
 # Default arguments
 dry_run="false"
@@ -287,8 +287,8 @@ if [[ "$dry_run" == "true" ]] ; then
 fi
 echo "wet run"
 
-type="text"
-#type="image"
+#type="text"
+type="image"
 
 if [[ "$type" == "text" ]] ; then
 
