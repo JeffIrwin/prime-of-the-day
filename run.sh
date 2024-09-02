@@ -94,7 +94,7 @@ palettes=("#66ddaa" "#114499" "#5588cc"  "green on blue"
           "#6f92fb" "#e5ecff" "#c2d1ff"  "dark blue on light blue 2"
           "#e5ecff" "#6f92fb" "#8fabff"  "light blue on dark blue 2"
           "#e5ffec" "#3fdb62" "#8fffab"  "light green on dark green"
-          "#e5e5e5" "#000000" "#14213d"  "gray on black (navy mg)"
+          "#e5e5e5" "#000000" "#14213d"  "grey on black (navy mg)"
           "#caf0f8" "#03045e" "#0077b6"  "light on dark blue"
           "#03045e" "#caf0f8" "#90e0ef"  "dark on light blue"
           "#c7f9cc" "#22577a" "#38a3a5"  "light on dark green"
@@ -103,13 +103,24 @@ palettes=("#66ddaa" "#114499" "#5588cc"  "green on blue"
           "#0d1b2a" "#e0e1dd" "#778da9"  "dark on light blue grey"
           "#ede0d4" "#7f5539" "#9c6644"  "light on dark brown"
           "#7f5539" "#ede0d4" "#e6ccb2"  "dark on light brown"
+          "#ffff00" "#ff0000" "#ffff00"  "hotdog (shoutout badcop)"
+          "#f1faee" "#1d3557" "#457b9d"  "white on blue"
+          "#1d3557" "#f1faee" "#a8dadc"  "blue on white"
+          "#101010" "#eddea4" "#f7a072"  "black on peach"
+          "#ebebeb" "#540b0e" "#9e2a2b"  "white on burgundy"
+          "#22223b" "#f2e9e4" "#c9ada7"  "dark blue on grey"
+          "#f2e9e4" "#22223b" "#4a4e69"  "grey on dark blue"
 )
 
 npalettes=$(( ${#palettes[@]} / 4 ))
 echo "npalettes = $npalettes"
 ipalette=$(( $RANDOM % $npalettes ))
 #ipalette=7
+#ipalette=$(( $npalettes - 1 ))
 echo "ipalette = $ipalette"
+
+# TODO: add option to save images using all palettes in a local dry run (no
+# pushing)
 
 fg_color=${palettes[$(( $ipalette * 4 + 0 ))]}  # foreground
 bg_color=${palettes[$(( $ipalette * 4 + 1 ))]}  # background
@@ -180,6 +191,8 @@ if [[ "$dry_run" == "true" ]] ; then
 	exit 0
 fi
 echo "wet run"
+
+#===============================================================================
 
 #type="text"
 type="image"
