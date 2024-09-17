@@ -5,12 +5,16 @@ set -eu
 
 # Default arguments
 dry_run="false"
+loc_run="false"
 
 while test $# -gt 0 ; do
 	#echo "$1"
 
 	if [[ "$1" == "--dry" ]] ; then
 		dry_run="true"
+
+	elif [[ "$1" == "--local" || "$1" == "-l" ]] ; then
+		loc_run="true"
 
 	else
 		echo -e "\e[33mWarning: unknown argument \"$1\" ignored\e[0m"
@@ -158,6 +162,11 @@ convert \
 	-bordercolor "$bg_color" -border 100x100 \
 	-bordercolor "$mg_color" -border 100x100 \
 	"$image_file"
+
+if [[ "$loc_run" == "true" ]] ; then
+	echo "local dry run"
+	exit 0
+fi
 
 GH_USER=JeffIrwin
 subdir="prime-of-the-day"
