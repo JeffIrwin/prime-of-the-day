@@ -116,6 +116,17 @@ palettes=("#66ddaa" "#114499" "#5588cc"  "green on blue"
           "#f2e9e4" "#22223b" "#4a4e69"  "grey on dark blue"
 )
 
+# Seed based on the state because the default seed seems not fair (it might be
+# based on system time, which is bad for cron jobs).  We don't really need an
+# RNG at all for palette selection.  We could just cycle through the palettes in
+# the same order repeatedly based on the state, but some pseudorandomness seems
+# nice
+state_file="store/prime-of-the-day/state.h"
+seed=$(grep -o '\<[0-9]*\>' "$state_file")
+echo "seed = $seed"
+RANDOM=$seed
+#echo "RANDOM = $RANDOM"
+
 npalettes=$(( ${#palettes[@]} / 4 ))
 echo "npalettes = $npalettes"
 ipalette=$(( $RANDOM % $npalettes ))
@@ -256,7 +267,6 @@ echo
 # read a number from the state header file, increment it, and write it back to
 # the file in place
 
-state_file="store/prime-of-the-day/state.h"
 count=$(grep -o '\<[0-9]*\>' "$state_file")
 ((count+=1))
 #echo "count = $count"
