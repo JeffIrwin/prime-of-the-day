@@ -114,6 +114,18 @@ palettes=("#66ddaa" "#114499" "#5588cc"  "green on blue"
           "#ebebeb" "#540b0e" "#9e2a2b"  "white on burgundy"
           "#22223b" "#f2e9e4" "#c9ada7"  "dark blue on grey"
           "#f2e9e4" "#22223b" "#4a4e69"  "grey on dark blue"
+          #"#ffcdb2" "#6d6875" "#b5838d"  "aoeu"
+          "#6d6875" "#ffcdb2" "#ffb4a2"  "grey on tan"
+          "#8c1c13" "#e7d7c1" "#a78a7f"  "red on tan"
+          "#e7d7c1" "#8c1c13" "#bf4342"  "tan on red"
+          "#ffffff" "#231942" "#5e548e"  "white on purple"
+          "#000000" "#e0b1cb" "#be95c4"  "black on purple"
+          "#ffd380" "#00202e" "#003f5c"  "yellow on blue"
+          "#00202e" "#ffd380" "#ffa600"  "blue on yellow"
+          "#f50538" "#000000" "#3d010e"  "red on black"
+          "#000000" "#f50538" "#b6042a"  "black on red"
+          "#0c080a" "#c7a5aa" "#b19297"  "black on grey"
+          "#c7a5aa" "#0c080a" "#21191c"  "grey on black"
 )
 
 # Seed based on the state because the default seed seems not fair (it might be
