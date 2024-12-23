@@ -266,7 +266,7 @@ if [[ "$type" == "text" ]] ; then
 
 elif [[ "$type" == "image" ]] ; then
 
-	response=$(curl -i -X --fail-with-body POST \
+	response=$(curl --fail-with-body -i -X POST \
 		"$url/$user_id/threads" \
 		-d "media_type=IMAGE" \
 		-d "image_url=$image_url" \
@@ -279,7 +279,7 @@ elif [[ "$type" == "image" ]] ; then
 	creation_id=$(echo $response \
 		| grep -o '{"id":.*}' \
 		| grep -o "[0-9]*")
-	response=$(curl -i -X --fail-with-body POST \
+	response=$(curl --fail-with-body -i -X POST \
 		"$url/$user_id/threads_publish" \
 		-d "creation_id=$creation_id" \
 		-d "access_token=$token")
