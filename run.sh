@@ -258,21 +258,23 @@ if [[ "$type" == "text" ]] ; then
 
 	# create a content container for the post and save the response which includes
 	# its creation id
-	response=$(curl -i -X POST \
+	response=$(curl --fail-with-body -i -X POST \
 		"$url/$user_id/threads" \
 		-d "media_type=TEXT" \
 		-d "text=$text" \
 		-d "access_token=$token")
+	check_response "$response"
 
 	creation_id=$(echo $response \
 		| grep -o '{"id":.*}' \
 		| grep -o "[0-9]*")
 
 	# publish the post
-	curl -i -X POST \
+	response=$(curl --fail-with-body -i -X POST \
 		"$url/$user_id/threads_publish" \
 		-d "creation_id=$creation_id" \
-		-d "access_token=$token"
+		-d "access_token=$token")
+	check_response "$response"
 
 elif [[ "$type" == "image" ]] ; then
 
@@ -299,9 +301,6 @@ else
 fi
 
 echo
-
-# TODO: testing only
-exit 0
 
 #****************
 
