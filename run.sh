@@ -272,13 +272,20 @@ elif [[ "$type" == "image" ]] ; then
 		-d "image_url=$image_url" \
 		-d "text=$text" \
 		-d "access_token=$token")
+	if [[ $(echo "$response" | grep '"error"') ]] ; then
+		exit -3
+	fi
+
 	creation_id=$(echo $response \
 		| grep -o '{"id":.*}' \
 		| grep -o "[0-9]*")
-	curl -i -X --fail-with-body POST \
+	response=$(curl -i -X --fail-with-body POST \
 		"$url/$user_id/threads_publish" \
 		-d "creation_id=$creation_id" \
-		-d "access_token=$token"
+		-d "access_token=$token")
+	if [[ $(echo "$response" | grep '"error"') ]] ; then
+		exit -3
+	fi
 
 else
 	echo -e "\e[91;1mError: bad post type\e[0m"
@@ -286,6 +293,9 @@ else
 fi
 
 echo
+
+# TODO: testing only
+exit 0
 
 #****************
 
