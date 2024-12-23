@@ -239,6 +239,16 @@ echo "wet run"
 
 #===============================================================================
 
+check_response()
+{
+	response=$1
+	echo "starting check_response()"
+	echo "response = $response"
+	if [[ $(echo "$response" | grep '"error"') ]] ; then
+		exit -3
+	fi
+}
+
 #type="text"
 type="image"
 
@@ -272,9 +282,7 @@ elif [[ "$type" == "image" ]] ; then
 		-d "image_url=$image_url" \
 		-d "text=$text" \
 		-d "access_token=$token")
-	if [[ $(echo "$response" | grep '"error"') ]] ; then
-		exit -3
-	fi
+	check_response "$response"
 
 	creation_id=$(echo $response \
 		| grep -o '{"id":.*}' \
@@ -283,9 +291,7 @@ elif [[ "$type" == "image" ]] ; then
 		"$url/$user_id/threads_publish" \
 		-d "creation_id=$creation_id" \
 		-d "access_token=$token")
-	if [[ $(echo "$response" | grep '"error"') ]] ; then
-		exit -3
-	fi
+	check_response "$response"
 
 else
 	echo -e "\e[91;1mError: bad post type\e[0m"
