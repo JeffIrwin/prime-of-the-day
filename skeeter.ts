@@ -32,8 +32,8 @@ async function main() {
 
 	const img_name   = process.argv[2];
 	const post_text  = process.argv[3];
-	const img_width  = process.argv[4];
-	const img_height = process.argv[5];
+	const img_width  = Number(process.argv[4]);
+	const img_height = Number(process.argv[5]);
 
 	console.log("img_name   = ", img_name);
 	console.log("post_text  = ", post_text);
