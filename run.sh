@@ -263,6 +263,17 @@ echo "wet run"
 # Run js
 node skeeter.js "$image_file" "$text" "$img_width" "$img_height"
 
+# Get ready for a state header commit later
+pushd store
+#git add ./$subdir/
+git config --unset-all http.https://github.com/.extraheader || true  # fails locally
+git config --global user.email "jirwin505@gmail.com"
+git config --global user.name "Jeff Irwin"
+#git commit -am "auto image commit from prime-of-the-day"
+#git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+#store_hash=$(git rev-parse HEAD)  # commit hash in store repo
+popd  # from store
+
 else
 #===============================================================================
 # ********  Threads posting  ********
