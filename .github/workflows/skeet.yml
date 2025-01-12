@@ -1,4 +1,4 @@
-name: ci
+name: skeet
 
 on:
   push:
@@ -53,7 +53,7 @@ jobs:
         token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
       run: |
-        cp store/prime-of-the-day/state-skeet.h .
+        cp store/prime-of-the-day/state-skeet.h ./state.h
         g++ -o main main.cpp
         ./main --test  # unit tests
         ./run.sh --skeet --dry
