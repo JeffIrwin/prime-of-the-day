@@ -52,6 +52,7 @@ jobs:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
+        BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
       run: |
         cp store/prime-of-the-day/state-skeet.h ./state.h
         g++ -o main main.cpp
@@ -64,6 +65,7 @@ jobs:
         user_id: ${{ secrets.user_id }}
         token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
+        BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
       run: |
         chmod +x ./run.sh
         ./run.sh --skeet
