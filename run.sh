@@ -250,7 +250,7 @@ img_height=$(identify -ping -format '%h' "$image_file")
 
 # Inject secrets into .env file
 echo "BLUESKY_USERNAME=prime-of-the-day.bsky.social" > .env
-echo "BLUESKY_PASSWORD=$BSKY_PWRD" >> .env
+echo "BLUESKY_PASSWORD=$BLUESKY_PASSWORD" >> .env
 
 # Compile ts to js
 npx tsc
