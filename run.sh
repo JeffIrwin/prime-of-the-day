@@ -225,7 +225,6 @@ fi
 GH_USER=JeffIrwin
 subdir="prime-of-the-day"
 
-
 if [[ "$skeet" == "true" ]]; then
 #===============================================================================
 # ********  Bluesky posting  ********
@@ -255,13 +254,14 @@ echo "BLUESKY_PASSWORD=$BLUESKY_PASSWORD" >> .env
 # Compile ts to js
 npx tsc
 
-# TODO: stop here for dry_run logic?
+if [[ "$dry_run" == "true" ]] ; then
+	echo "dry run"
+	exit 0
+fi
+echo "wet run"
 
 # Run js
 node skeeter.js "$image_file" "$text" "$img_width" "$img_height"
-
-# TODO
-exit 0
 
 else
 #===============================================================================
