@@ -255,6 +255,8 @@ echo "BLUESKY_PASSWORD=$BLUESKY_PASSWORD" >> .env
 # Compile ts to js
 npx tsc
 
+# TODO: stop here for dry_run logic?
+
 # Run js
 node skeeter.js "$image_file" "$text" "$img_width" "$img_height"
 

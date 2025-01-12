@@ -40,7 +40,7 @@ async function main() {
 	console.log("img_width  = ", img_width);
 	console.log("img_height = ", img_height);
 
-	return; // TODO
+	//return;
 
 	await agent.login({ identifier: process.env.BLUESKY_USERNAME!, password: process.env.BLUESKY_PASSWORD!})
 
