@@ -1,0 +1,21 @@
+{
+  "name": "prime-of-the-day",
+  "version": "1.0.0",
+  "description": "a new prime number, every day on threads [@prime_of_the_day](https://www.threads.net/@prime_of_the_day)",
+  "main": "skeeter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@atproto/api": "^0.6.20",
+    "cron": "^3.1.0",
+    "dotenv": "^16.3.1",
+    "fs": "^0.0.1-security",
+    "process": "^0.11.10"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5"
+  }
+}

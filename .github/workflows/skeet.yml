@@ -1,0 +1,74 @@
+name: ci
+
+on:
+  push:
+  schedule:
+    - cron: '17 * * * *'
+    #- cron: '17 9 * * *'
+    #- cron: '*/5 * * * *'
+
+# note that github schedules usually start a few minutes late.  cron examples:
+#
+#    - cron: '17  9 * * *'  # 9:17 UTC time (just after ~5 AM eastern depending on dst) every day
+#    - cron: '*/5 * * * *'  # every 5 minutes, or as fast as gh will run
+#
+# github yaml is sensitive to whitespace and end-of-line comments, so don't try
+# to comment the actual cron's above.  the only way to have separate on-push and
+# on-schedule jobs is by WETly repeating the cron string below in multiple `if`
+# statements.  github does not have `else`.
+
+jobs:
+  ci-job:
+    name: ci-job
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: "git checkout"
+      uses: actions/checkout@v4
+      with: { ref: main }
+
+    - name: "log date start"
+      run: |
+        date
+        git log -1
+        echo "event name = ${{ github.event_name }} "
+
+    - name: "clone store"
+      uses: actions/checkout@v4
+      with:
+        repository: JeffIrwin/store
+        ref: main
+        path: "./store"
+
+    - name: "install tools"
+      run: |
+        sudo apt-get install -y imagemagick
+        #sudo apt-get install -y gsfonts  # needed by imagemagick's `convert`
+
+    - name: "post skeet dry run"
+      if: github.event_name != 'schedule'
+      env:
+        user_id: ${{ secrets.user_id }}
+        token:   ${{ secrets.token   }}
+        GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
+      run: |
+        cp store/prime-of-the-day/state.h .
+        g++ -o main main.cpp
+        ./main --test  # unit tests
+        ./run.sh --skeet --dry
+
+    - name: "post skeet wet run"
+      if: github.event_name == 'schedule'
+      env:
+        user_id: ${{ secrets.user_id }}
+        token:   ${{ secrets.token   }}
+        GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
+      run: |
+        chmod +x ./run.sh
+        ./run.sh --skeet
+
+    - name: "log date end"
+      run: |
+        date
+

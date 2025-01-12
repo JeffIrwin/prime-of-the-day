@@ -2,8 +2,15 @@
 main
 prime.png
 secrets.sh
+.env
 state.h
 
 scratch/
 store/
+
+node_modules/
+package-lock.json
+
+# Typescript compiler output
+skeeter.js
 

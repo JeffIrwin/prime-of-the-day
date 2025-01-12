@@ -6,12 +6,16 @@ set -eu
 # Default arguments
 dry_run="false"
 loc_run="false"
+skeet="false"
 
 while test $# -gt 0 ; do
 	#echo "$1"
 
 	if [[ "$1" == "--dry" ]] ; then
 		dry_run="true"
+
+	elif [[ "$1" == "--skeet" ]] ; then
+		skeet="true"
 
 	elif [[ "$1" == "--local" || "$1" == "-l" ]] ; then
 		loc_run="true"
@@ -74,8 +78,26 @@ done
 
 #===============================================================================
 
+# Functions
+
+check_response()
+{
+	response=$1
+	echo "starting check_response()"
+	echo "response = $response"
+	if [[ $(echo "$response" | grep '"error"') ]] ; then
+		exit -3
+	fi
+}
+
+#===============================================================================
+
 # get state header from store repo
-cp store/prime-of-the-day/state.h .
+if [[ "$skeet" == "true" ]]; then
+	cp store/prime-of-the-day/state-skeet.h ./state.h
+else
+	cp store/prime-of-the-day/state.h .
+fi
 
 # get a prime number
 g++ -o main main.cpp
@@ -136,7 +158,13 @@ palettes=("#66ddaa" "#114499" "#5588cc"  "green on blue"
 # RNG at all for palette selection.  We could just cycle through the palettes in
 # the same order repeatedly based on the state, but some pseudorandomness seems
 # nice
-state_file="store/prime-of-the-day/state.h"
+
+if [[ "$skeet" == "true" ]]; then
+	state_file="store/prime-of-the-day/state-skeet.h"
+else
+	state_file="store/prime-of-the-day/state.h"
+fi
+
 seed=$(grep -o '\<[0-9]*\>' "$state_file")
 echo "seed = $seed"
 RANDOM=$seed
@@ -197,6 +225,47 @@ fi
 GH_USER=JeffIrwin
 subdir="prime-of-the-day"
 
+
+if [[ "$skeet" == "true" ]]; then
+#===============================================================================
+# ********  Bluesky posting  ********
+# ***********************************
+
+# c.f. run-skeeter.sh (for local prototype testing)
+
+# One-time setup:
+# - sudo npm i -g typescript
+# - sudo npm i -g ts-node
+# - npm install
+npm install
+
+# Get image dimensions:
+#
+#     identify -ping -format '%w %h\n' store/prime-of-the-day/prime.png
+#
+# `identify` is part of imagemagick
+#
+img_width=$( identify -ping -format '%w' "$image_file")
+img_height=$(identify -ping -format '%h' "$image_file")
+
+# Inject secrets into .env file
+echo "BLUESKY_USERNAME=prime-of-the-day.bsky.social" > .env
+echo "BLUESKY_PASSWORD=$BSKY_PWRD" >> .env
+
+# Compile ts to js
+npx tsc
+
+# Run js
+node skeeter.js "$image_file" "$text" "$img_width" "$img_height"
+
+# TODO
+exit 0
+
+else
+#===============================================================================
+# ********  Threads posting  ********
+# ***********************************
+
 # push the image to github. all threads image posts must have a public image
 # url, so it needs to be uploaded somewhere else before posting on threads
 mkdir -p store/$subdir/
@@ -228,16 +297,6 @@ fi
 echo "wet run"
 
 #===============================================================================
-
-check_response()
-{
-	response=$1
-	echo "starting check_response()"
-	echo "response = $response"
-	if [[ $(echo "$response" | grep '"error"') ]] ; then
-		exit -3
-	fi
-}
 
 #type="text"
 type="image"
@@ -290,12 +349,21 @@ else
 	exit -2
 fi
 
+#===============================================================================
+fi
+# ********  end bluesky/threads if/else  ********
+#===============================================================================
+
 echo
 
 #****************
 
 # read a number from the state header file, increment it, and write it back to
 # the file in place
+#
+# this happens for both bluesky and threads, although the name of the state file
+# differs (they may post at different cadences or have outages that get them out
+# of sync)
 
 count=$(grep -o '\<[0-9]*\>' "$state_file")
 ((count+=1))
