@@ -392,6 +392,9 @@ git commit -am "auto state commit from prime-of-the-day"
 # This could fail in a race condition -- there are multiple github actions yml
 # files working concurrently.  Might need to put this and other push in a retry
 # loop
+#
+# At least the skeet job and thread job modify different files, so there should
+# never be a conflict
 git pull --rebase
 git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
 
