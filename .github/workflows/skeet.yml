@@ -57,7 +57,8 @@ jobs:
         cp store/prime-of-the-day/state-skeet.h ./state.h
         g++ -o main main.cpp
         ./main --test  # unit tests
-        ./run.sh --skeet --dry
+        #./run.sh --skeet --dry
+        ./run.sh --skeet
 
     - name: "post skeet wet run"
       if: github.event_name == 'schedule'
