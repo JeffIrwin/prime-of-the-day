@@ -13,7 +13,6 @@ const agent = new BskyAgent({
 
 function readFileAsUint8Array(filePath) {
     try {
-        //const data = await fs.readFile(filePath);
         const data = fs.readFileSync(filePath);
         const uint8Array = new Uint8Array(data);
         return uint8Array;
@@ -39,7 +38,6 @@ async function main() {
 	console.log("post_text  = ", post_text);
 	console.log("img_width  = ", img_width);
 	console.log("img_height = ", img_height);
-
 	//return;
 
 	await agent.login({ identifier: process.env.BLUESKY_USERNAME!, password: process.env.BLUESKY_PASSWORD!})

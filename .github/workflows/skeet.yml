@@ -49,22 +49,18 @@ jobs:
     - name: "post skeet dry run"
       if: github.event_name != 'schedule'
       env:
-        user_id: ${{ secrets.user_id }}
-        token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
         BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
       run: |
         cp store/prime-of-the-day/state-skeet.h ./state.h
         g++ -o main main.cpp
         ./main --test  # unit tests
-        #./run.sh --skeet --dry
+        #TODO ./run.sh --skeet --dry
         ./run.sh --skeet
 
     - name: "post skeet wet run"
       if: github.event_name == 'schedule'
       env:
-        user_id: ${{ secrets.user_id }}
-        token:   ${{ secrets.token   }}
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
         BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
       run: |

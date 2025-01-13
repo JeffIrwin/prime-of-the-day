@@ -90,6 +90,13 @@ check_response()
 	fi
 }
 
+configure_github()
+{
+	git config --unset-all http.https://github.com/.extraheader || true  # fails locally
+	git config --global user.email "jirwin505@gmail.com"
+	git config --global user.name "Jeff Irwin"
+}
+
 #===============================================================================
 
 # get state header from store repo
@@ -226,143 +233,137 @@ GH_USER=JeffIrwin
 subdir="prime-of-the-day"
 
 if [[ "$skeet" == "true" ]]; then
-#===============================================================================
-# ********  Bluesky posting  ********
-# ***********************************
 
-# c.f. run-skeeter.sh (for local prototype testing)
-
-# One-time setup:
-# - sudo npm i -g typescript
-# - sudo npm i -g ts-node
-# - npm install
-npm install
-
-# Get image dimensions:
-#
-#     identify -ping -format '%w %h\n' store/prime-of-the-day/prime.png
-#
-# `identify` is part of imagemagick
-#
-img_width=$( identify -ping -format '%w' "$image_file")
-img_height=$(identify -ping -format '%h' "$image_file")
-
-# Inject secrets into .env file
-echo "BLUESKY_USERNAME=prime-of-the-day.bsky.social" > .env
-echo "BLUESKY_PASSWORD=$BLUESKY_PASSWORD" >> .env
-
-# Compile ts to js
-npx tsc
-
-if [[ "$dry_run" == "true" ]] ; then
-	echo "dry run"
-	exit 0
-fi
-echo "wet run"
-
-# Run js
-node skeeter.js "$image_file" "$text" "$img_width" "$img_height"
-
-# Get ready for a state header commit later
-pushd store
-#git add ./$subdir/
-git config --unset-all http.https://github.com/.extraheader || true  # fails locally
-git config --global user.email "jirwin505@gmail.com"
-git config --global user.name "Jeff Irwin"
-#git commit -am "auto image commit from prime-of-the-day"
-#git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
-#store_hash=$(git rev-parse HEAD)  # commit hash in store repo
-popd  # from store
+	#===============================================================================
+	# ********  Bluesky posting  ********
+	# ***********************************
+	
+	# c.f. run-skeeter.sh (for local prototype testing)
+	
+	# One-time setup:
+	# - sudo npm i -g typescript
+	# - sudo npm i -g ts-node
+	# - npm install
+	npm install
+	
+	# Get image dimensions:
+	#
+	#     identify -ping -format '%w %h\n' store/prime-of-the-day/prime.png
+	#
+	# `identify` is part of imagemagick
+	#
+	img_width=$( identify -ping -format '%w' "$image_file")
+	img_height=$(identify -ping -format '%h' "$image_file")
+	
+	# Inject secrets into .env file
+	echo "BLUESKY_USERNAME=prime-of-the-day.bsky.social" > .env
+	echo "BLUESKY_PASSWORD=$BLUESKY_PASSWORD" >> .env
+	
+	# Compile ts to js
+	npx tsc
+	
+	if [[ "$dry_run" == "true" ]] ; then
+		echo "dry run"
+		exit 0
+	fi
+	echo "wet run"
+	
+	# Run js
+	node skeeter.js "$image_file" "$text" "$img_width" "$img_height"
+	
+	# Get ready for a state header commit later
+	pushd store
+	configure_github
+	popd  # from store
 
 else
-#===============================================================================
-# ********  Threads posting  ********
-# ***********************************
-
-# push the image to github. all threads image posts must have a public image
-# url, so it needs to be uploaded somewhere else before posting on threads
-mkdir -p store/$subdir/
-mv "$image_file" store/$subdir/
-pushd store
-git add ./$subdir/
-git config --unset-all http.https://github.com/.extraheader || true  # fails locally
-git config --global user.email "jirwin505@gmail.com"
-git config --global user.name "Jeff Irwin"
-git commit -am "auto image commit from prime-of-the-day"
-git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
-store_hash=$(git rev-parse HEAD)  # commit hash in store repo
-popd  # from store
-
-url="https://graph.threads.net/v1.0"
-
-# use permalink url. i've seen github not update immediately on "main" branch
-# even after push. e.g.
-#
-#     https://raw.githubusercontent.com/JeffIrwin/store/4dff2a34a63f0d4750a8e5d4a6e739595bc4564c/prime-of-the-day/prime.png
-#
-image_url="https://raw.githubusercontent.com/$GH_USER/store/$store_hash/$subdir/$image_file"
-echo "image_url = $image_url"
-
-if [[ "$dry_run" == "true" ]] ; then
-	echo "dry run"
-	exit 0
-fi
-echo "wet run"
-
-#===============================================================================
-
-#type="text"
-type="image"
-
-if [[ "$type" == "text" ]] ; then
-
-	# posting consists of two steps.  first create a container, then publish it
-
-	# create a content container for the post and save the response which includes
-	# its creation id
-	response=$(curl --fail-with-body -i -X POST \
-		"$url/$user_id/threads" \
-		-d "media_type=TEXT" \
-		-d "text=$text" \
-		-d "access_token=$token")
-	check_response "$response"
-
-	creation_id=$(echo $response \
-		| grep -o '{"id":.*}' \
-		| grep -o "[0-9]*")
-
-	# publish the post
-	response=$(curl --fail-with-body -i -X POST \
-		"$url/$user_id/threads_publish" \
-		-d "creation_id=$creation_id" \
-		-d "access_token=$token")
-	check_response "$response"
-
-elif [[ "$type" == "image" ]] ; then
-
-	response=$(curl --fail-with-body -i -X POST \
-		"$url/$user_id/threads" \
-		-d "media_type=IMAGE" \
-		-d "image_url=$image_url" \
-		-d "text=$text" \
-		-d "access_token=$token")
-	check_response "$response"
-
-	creation_id=$(echo $response \
-		| grep -o '{"id":.*}' \
-		| grep -o "[0-9]*")
-	response=$(curl --fail-with-body -i -X POST \
-		"$url/$user_id/threads_publish" \
-		-d "creation_id=$creation_id" \
-		-d "access_token=$token")
-	check_response "$response"
-
-else
-	echo -e "\e[91;1mError: bad post type\e[0m"
-	exit -2
-fi
-
-#===============================================================================
+	#===============================================================================
+	# ********  Threads posting  ********
+	# ***********************************
+	
+	# push the image to github. all threads image posts must have a public image
+	# url, so it needs to be uploaded somewhere else before posting on threads
+	mkdir -p store/$subdir/
+	mv "$image_file" store/$subdir/
+	pushd store
+	git add ./$subdir/
+	configure_github
+	git commit -am "auto image commit from prime-of-the-day"
+	git pull --rebase
+	git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+	store_hash=$(git rev-parse HEAD)  # commit hash in store repo
+	popd  # from store
+	
+	url="https://graph.threads.net/v1.0"
+	
+	# use permalink url. i've seen github not update immediately on "main" branch
+	# even after push. e.g.
+	#
+	#     https://raw.githubusercontent.com/JeffIrwin/store/4dff2a34a63f0d4750a8e5d4a6e739595bc4564c/prime-of-the-day/prime.png
+	#
+	image_url="https://raw.githubusercontent.com/$GH_USER/store/$store_hash/$subdir/$image_file"
+	echo "image_url = $image_url"
+	
+	if [[ "$dry_run" == "true" ]] ; then
+		echo "dry run"
+		exit 0
+	fi
+	echo "wet run"
+	
+	#===============================================================================
+	
+	#type="text"
+	type="image"
+	
+	if [[ "$type" == "text" ]] ; then
+	
+		# posting consists of two steps.  first create a container, then publish it
+	
+		# create a content container for the post and save the response which includes
+		# its creation id
+		response=$(curl --fail-with-body -i -X POST \
+			"$url/$user_id/threads" \
+			-d "media_type=TEXT" \
+			-d "text=$text" \
+			-d "access_token=$token")
+		check_response "$response"
+	
+		creation_id=$(echo $response \
+			| grep -o '{"id":.*}' \
+			| grep -o "[0-9]*")
+	
+		# publish the post
+		response=$(curl --fail-with-body -i -X POST \
+			"$url/$user_id/threads_publish" \
+			-d "creation_id=$creation_id" \
+			-d "access_token=$token")
+		check_response "$response"
+	
+	elif [[ "$type" == "image" ]] ; then
+	
+		response=$(curl --fail-with-body -i -X POST \
+			"$url/$user_id/threads" \
+			-d "media_type=IMAGE" \
+			-d "image_url=$image_url" \
+			-d "text=$text" \
+			-d "access_token=$token")
+		check_response "$response"
+	
+		creation_id=$(echo $response \
+			| grep -o '{"id":.*}' \
+			| grep -o "[0-9]*")
+		response=$(curl --fail-with-body -i -X POST \
+			"$url/$user_id/threads_publish" \
+			-d "creation_id=$creation_id" \
+			-d "access_token=$token")
+		check_response "$response"
+	
+	else
+		echo -e "\e[91;1mError: bad post type\e[0m"
+		exit -2
+	fi
+	
+	#===============================================================================
 fi
 # ********  end bluesky/threads if/else  ********
 #===============================================================================
@@ -387,6 +388,12 @@ sed -i "s/\<[0-9]*\>/$count/" "$state_file"
 pushd store
 git add ./$subdir/
 git commit -am "auto state commit from prime-of-the-day"
+
+# This could fail in a race condition -- there are multiple github actions yml
+# files working concurrently.  Might need to put this and other push in a retry
+# loop
+git pull --rebase
 git push https://token:$GH_PA_TOKEN@github.com/$GH_USER/store
+
 popd  # from store
 
