@@ -100,12 +100,17 @@ configure_github()
 #===============================================================================
 
 # get state header and cache from store repo
+subdir="prime-of-the-day"
 if [[ "$skeet" == "true" ]]; then
-	cp store/prime-of-the-day/state-skeet.h ./state.h
+	cp store/$subdir/state-skeet.h ./state.h
 else
-	cp store/prime-of-the-day/state.h .
+	cp store/$subdir/state.h .
 fi
-#cp store/prime-of-the-day/cache.bin . || true
+
+# Threads and bsky can share the same cache, although they have different
+# state.h cadences
+cp store/$subdir/cache.tgz . || true
+tar xvf cache.tgz || true
 
 # get a prime number
 g++ -o main main.cpp
@@ -168,9 +173,9 @@ palettes=("#66ddaa" "#114499" "#5588cc"  "green on blue"
 # nice
 
 if [[ "$skeet" == "true" ]]; then
-	state_file="store/prime-of-the-day/state-skeet.h"
+	state_file="store/$subdir/state-skeet.h"
 else
-	state_file="store/prime-of-the-day/state.h"
+	state_file="store/$subdir/state.h"
 fi
 
 seed=$(grep -o '\<[0-9]*\>' "$state_file")
@@ -231,7 +236,6 @@ if [[ "$loc_run" == "true" ]] ; then
 fi
 
 GH_USER=JeffIrwin
-subdir="prime-of-the-day"
 
 if [[ "$skeet" == "true" ]]; then
 
@@ -373,6 +377,10 @@ echo
 
 #****************
 
+# Compress cache to reduce file size for git
+tar czf cache.tgz cache.bin
+cp cache.tgz store/$subdir/
+
 # read a number from the state header file, increment it, and write it back to
 # the file in place
 #
@@ -388,7 +396,7 @@ sed -i "s/\<[0-9]*\>/$count/" "$state_file"
 
 pushd store
 git add ./$subdir/
-git commit -am "auto state commit from prime-of-the-day"
+git commit -am "auto state/cache commit from prime-of-the-day"
 
 # This could fail in a race condition -- there are multiple github actions yml
 # files working concurrently.  Might need to put this and other push in a retry
