@@ -55,7 +55,7 @@ jobs:
         cp store/prime-of-the-day/state.h .
         g++ -o main main.cpp
         ./main --test  # unit tests
-        ./run.sh
+        ./run.sh 
 
     - name: "post thread wet run"
       if: github.event_name == 'schedule'
