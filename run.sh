@@ -386,6 +386,13 @@ echo
 #****************
 
 # Compress cache to reduce file size for git
+#
+# With 300,000 primes, cache.bin is 2.3 MB and cache.tgz is 445 KB.  As primes
+# get much bigger, I expect compression to be less effective.  For small primes,
+# most of the 8 bytes of a size_t are zeros
+#
+# Files over 100 MB are blocked by github.  Over that, git LFS is needed
+#
 tar czf cache.tgz cache.bin
 cp cache.tgz store/$subdir/
 

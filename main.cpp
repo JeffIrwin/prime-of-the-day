@@ -93,6 +93,9 @@ size_t nth_prime_number(size_t n, std::vector<size_t>& primes)
 	while (primes.size() < n)
 	{
 		// Check if num is divisible by any prime before it
+		//
+		// A sqrt early break optimization could also be used here, but take
+		// care with rounding and overflow
 		bool is_prime = true;
 		for (size_t ip = 0; ip < primes.size(); ip++)
 			if (num % primes[ip] == 0)
@@ -255,8 +258,12 @@ int main(int argc, char* argv[])
 
 	// The 100,000'th prime number is 1,299,709 and can be calculated from
 	// scratch without caching here in about 13 seconds.  if i continue posting
-	// once a day, it will take roughly 300 years to get to that point, so there
-	// aren't any concerns about run time or size_t overflow.
+	// once a day to threads, it will take roughly 300 years to get to that
+	// point, so there aren't any concerns about run time or size_t overflow.
+	//
+	// Now I post 24 skeets a day.  At that rate, it will take 34 years to get
+	// to the 300,000'th prime number (prime == 4,256,233).  With caching, that
+	// runs in about 5 ms.  Without caching, that takes 90 s
 
 	//std::cout << nth_prime_number(100000) << "\n";
 
