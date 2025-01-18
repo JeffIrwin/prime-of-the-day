@@ -99,12 +99,13 @@ configure_github()
 
 #===============================================================================
 
-# get state header from store repo
+# get state header and cache from store repo
 if [[ "$skeet" == "true" ]]; then
 	cp store/prime-of-the-day/state-skeet.h ./state.h
 else
 	cp store/prime-of-the-day/state.h .
 fi
+#cp store/prime-of-the-day/cache.bin . || true
 
 # get a prime number
 g++ -o main main.cpp

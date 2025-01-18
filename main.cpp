@@ -230,16 +230,22 @@ size_t unit_tests()
 
 int main(int argc, char* argv[])
 {
-	// TODO: add a `--no-cache` arg for testing at least (or cache corruption
-	// recovery)
+	// The `--no-cache` arg is for testing and cache corruption recovery.
+	// Hopefully I don't need the latter
+	//
+	// Cache is always written at end.  This just controls whether or not it is
+	// read initially
 
 	bool test = false;
+	bool do_cache = true;
 	for (int i = 1; i < argc; i++)
 	{
 		std::string arg = argv[i];
 		//std::cerr << "arg = " << arg << "\n";
 		if (arg == "--test")
 			test = true;
+		else if (arg == "--no-cache")
+			do_cache = false;
 		else
 			std::cerr
 				<< YELLOW
@@ -261,8 +267,7 @@ int main(int argc, char* argv[])
 	std::cerr << "days = " << days << " days\n";
 
 	std::vector<size_t> primes;
-	// TODO: check --no-cache option
-	if (std::filesystem::exists(CACHE_FILENAME))
+	if (do_cache && std::filesystem::exists(CACHE_FILENAME))
 		primes = read_file_vec_size_t(CACHE_FILENAME);
 
 	auto nth_prime = nth_prime_number(days, primes);
