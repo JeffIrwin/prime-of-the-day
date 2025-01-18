@@ -99,7 +99,7 @@ configure_github()
 
 #===============================================================================
 
-# get state header and cache from store repo
+# Get state header and cache from store repo
 subdir="prime-of-the-day"
 if [[ "$skeet" == "true" ]]; then
 	cp store/$subdir/state-skeet.h ./state.h
@@ -107,23 +107,25 @@ else
 	cp store/$subdir/state.h .
 fi
 
-# Threads and bsky can share the same cache, although they have different
-# state.h cadences
+# Threads and bsky can share the same cache because they re-write in its
+# entirety without shrinking, although they have different state.h cadences
 cp store/$subdir/cache.tgz . || true
 tar xvf cache.tgz || true
 
-# get a prime number
+# Get a prime number
 g++ -o main main.cpp
 
 #prime=$(./main | tail -1)
 output=$(./main)
-echo "output = "
+echo "output =
+{"
 echo "$output"
+echo "}"
 prime=$(echo "$output" | tail -1)  # double quotes are required for newlines
 
 echo "prime = $prime"
 
-# set the text payload to be posted
+# Set the text payload to be posted
 text="$prime"
 
 # i got most of these palettes from https://coolors.co/palettes/trending
