@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <filesystem>
+#include <fstream>
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -13,17 +15,84 @@ const std::string RED     = "\033[91;1m"; // bold bright
 const std::string YELLOW  = "\033[33m";
 const std::string RESET   = "\033[0m";
 
-size_t nth_prime_number(size_t n)
+void write_file_vec_size_t
+(
+	const std::vector<size_t>& vec,
+	const std::string& filename
+)
 {
-	// return the nth prime.  to be clear about off-by-one errors,
+	// The file first contains the size of vec and then its data
+
+	std::ofstream file(filename, std::ios::binary);
+	if (!file)
+	{
+		std::cerr << "Error opening file for writing." << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	std::cout << "Writing cache file \"" << filename << "\"\n";
+
+	size_t size = vec.size();
+	file.write(reinterpret_cast<const char*>(&size), sizeof(size));
+	file.write(reinterpret_cast<const char*>(vec.data()), size * sizeof(size_t));
+
+	file.close();
+}
+
+std::vector<size_t> read_file_vec_size_t(const std::string& filename)
+{
+	std::ifstream file(filename, std::ios::binary);
+	if (!file)
+	{
+		std::cerr << "Error opening file for reading." << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	std::cout << "Reading cache file \"" << filename << "\"\n";
+
+	//size_t size = file.read();
+	size_t size;
+	file.read(reinterpret_cast<char*>(&size), sizeof(size));
+	std::cout << "size = " << size << "\n";
+
+	std::vector<size_t> vec(size);
+	vec.reserve(size + 1);  // plus 1 because we're going to get the next prime
+
+	std::cout << "vec size = " << vec.size() << "\n";
+	std::cout << "vec cap  = " << vec.capacity() << "\n";
+
+	file.read(reinterpret_cast<char*>(vec.data()), size * sizeof(size_t));
+	file.close();
+
+	//for (auto& v: vec)
+	//	std::cout << "v = " << v << "\n";
+
+	return vec;
+}
+
+const std::string CACHE_FILENAME = "cache.bin";
+
+size_t nth_prime_number(size_t n, std::vector<size_t>& primes)
+{
+	// Return the nth prime.  to be clear about off-by-one errors,
 	// nth_prime_number(1) returns 2.
+	//
+	// Also save all primes to a binary format cache file
+
+	//std::cout << "starting nth_prime_number()\n";
 	if (n <= 0)
 		return 2;
 
-	std::vector<size_t> primes;
-	primes.push_back(2);
+	//std::vector<size_t> test = read_file_vec_size_t(CACHE_FILENAME);
+	//std::vector<size_t> primes;
 
-	size_t num = 3;
+	if (primes.size() <= 0)
+		primes.push_back(2);
+
+	// Iteration below assumes we start with an odd number (+= 2)
+	if (primes.size() == 1)
+		primes.push_back(3);
+
+	//size_t num = 3;
+	size_t num = primes[ primes.size() - 1 ];
 
 	// keep generating primes until we get to the nth one
 	while (primes.size() < n)
@@ -37,17 +106,24 @@ size_t nth_prime_number(size_t n)
 				break;
 			}
 		if (is_prime)
+		{
+			//std::cout << "    pushing " << num << "\n";
 			primes.push_back(num);
+		}
 
 		num += 2;
 	}
+
+	//// Don't write here, because then `--test` will shrink the cache
+	//write_file_vec_size_t(primes, CACHE_FILENAME);
+
 	return primes[n-1];
 }
 
 std::string comma_delim(size_t n)
 {
-	// convert a number to a string and add commas as thousands separators.
-	// could use fmtlib instead
+	// Convert a number to a string and add commas as thousands separators.
+	// Could use fmtlib instead
 	std::string str_bare = std::to_string(n);
 	size_t nstr = str_bare.size();
 
@@ -56,7 +132,7 @@ std::string comma_delim(size_t n)
 		// stylistic preference: don't dangle a single digit for 4 digit numbers
 		return str_bare;
 
-	// should use str builder but these aren't very big
+	// Should use str builder but these aren't very big
 	std::string str = "";
 	for (int i = 1; i <= nstr; i++)
 	{
@@ -110,20 +186,33 @@ size_t unit_tests()
 
 	//********
 
-	TEST(nth_prime_number(0) == 2); // not really defined but at least it shouldn't crash
-	TEST(nth_prime_number(1) == 2);
-	TEST(nth_prime_number(2) == 3);
-	TEST(nth_prime_number(3) == 5);
-	TEST(nth_prime_number(4) == 7);
-	TEST(nth_prime_number(5) == 11);
-	TEST(nth_prime_number(6) == 13);
-	TEST(nth_prime_number(7) == 17);
+	std::vector<size_t> primes = {};
+	TEST(nth_prime_number(0, primes) == 2); // not really defined but at least it shouldn't crash
+	TEST(nth_prime_number(1, primes) == 2);
+	TEST(nth_prime_number(2, primes) == 3);
+	TEST(nth_prime_number(3, primes) == 5);
+	TEST(nth_prime_number(4, primes) == 7);
+	TEST(nth_prime_number(5, primes) == 11);
+	TEST(nth_prime_number(6, primes) == 13);
+	TEST(nth_prime_number(7, primes) == 17);
 
-	TEST(nth_prime_number(100) == 541);
-	TEST(nth_prime_number(1000) == 7919);
-	TEST(nth_prime_number(10000) == 104729);
-	TEST(nth_prime_number(10001) == 104743);
-	TEST(nth_prime_number(10002) == 104759);
+	// Test below cache size (no further math required)
+	TEST(nth_prime_number(5, primes) == 11);
+	TEST(nth_prime_number(6, primes) == 13);
+	TEST(nth_prime_number(7, primes) == 17);
+
+	// Test resetting cache
+	primes = {}; TEST(nth_prime_number(1, primes) == 2);
+	primes = {}; TEST(nth_prime_number(2, primes) == 3);
+	primes = {}; TEST(nth_prime_number(3, primes) == 5);
+	primes = {}; TEST(nth_prime_number(7, primes) == 17);
+
+	// Whether using cache or not, you can get primes non-sequentially
+	TEST(nth_prime_number(100  , primes) == 541);
+	TEST(nth_prime_number(1000 , primes) == 7919);
+	TEST(nth_prime_number(10000, primes) == 104729);
+	TEST(nth_prime_number(10001, primes) == 104743);
+	TEST(nth_prime_number(10002, primes) == 104759);
 
 	if (nfail == 0)
 		std::cout
@@ -141,6 +230,9 @@ size_t unit_tests()
 
 int main(int argc, char* argv[])
 {
+	// TODO: add a `--no-cache` arg for testing at least (or cache corruption
+	// recovery)
+
 	bool test = false;
 	for (int i = 1; i < argc; i++)
 	{
@@ -158,18 +250,27 @@ int main(int argc, char* argv[])
 	if (test)
 		return unit_tests();
 
-	//// the 100,000'th prime number is 1,299,709 and can be calculated here in
-	//// about 13 seconds.  if i continue posting every day, it will take roughly
-	//// 300 years to get to that point, so there aren't any concerns about run
-	//// time or size_t overflow.
+	// The 100,000'th prime number is 1,299,709 and can be calculated from
+	// scratch without caching here in about 13 seconds.  if i continue posting
+	// once a day, it will take roughly 300 years to get to that point, so there
+	// aren't any concerns about run time or size_t overflow.
+
 	//std::cout << nth_prime_number(100000) << "\n";
 
 	auto days = PRIME_STATE_COUNT;
 	std::cerr << "days = " << days << " days\n";
 
+	std::vector<size_t> primes;
+	// TODO: check --no-cache option
+	if (std::filesystem::exists(CACHE_FILENAME))
+		primes = read_file_vec_size_t(CACHE_FILENAME);
+
+	auto nth_prime = nth_prime_number(days, primes);
+	write_file_vec_size_t(primes, CACHE_FILENAME);
+
 	// log nothing else after this.  the run.sh script will pickup the last line
 	// of stdout for the text payload
-	std::cout << comma_delim(nth_prime_number(days)) << "\n";
+	std::cout << comma_delim(nth_prime) << "\n";
 
 	return 0;
 }
