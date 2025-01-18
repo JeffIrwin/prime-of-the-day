@@ -114,7 +114,13 @@ tar xvf cache.tgz || true
 
 # get a prime number
 g++ -o main main.cpp
-prime=$(./main | tail -1)
+
+#prime=$(./main | tail -1)
+output=$(./main)
+echo "output = "
+echo "$output"
+prime=$(echo "$output" | tail -1)  # double quotes are required for newlines
+
 echo "prime = $prime"
 
 # set the text payload to be posted
