@@ -48,7 +48,6 @@ std::vector<size_t> read_file_vec_size_t(const std::string& filename)
 	}
 	std::cout << "Reading cache file \"" << filename << "\"\n";
 
-	//size_t size = file.read();
 	size_t size;
 	file.read(reinterpret_cast<char*>(&size), sizeof(size));
 	std::cout << "size = " << size << "\n";
@@ -81,9 +80,6 @@ size_t nth_prime_number(size_t n, std::vector<size_t>& primes)
 	if (n <= 0)
 		return 2;
 
-	//std::vector<size_t> test = read_file_vec_size_t(CACHE_FILENAME);
-	//std::vector<size_t> primes;
-
 	if (primes.size() <= 0)
 		primes.push_back(2);
 
@@ -91,13 +87,12 @@ size_t nth_prime_number(size_t n, std::vector<size_t>& primes)
 	if (primes.size() == 1)
 		primes.push_back(3);
 
-	//size_t num = 3;
 	size_t num = primes[ primes.size() - 1 ];
 
-	// keep generating primes until we get to the nth one
+	// Keep generating primes until we get to the nth one
 	while (primes.size() < n)
 	{
-		// check if num is divisible by any prime before it
+		// Check if num is divisible by any prime before it
 		bool is_prime = true;
 		for (size_t ip = 0; ip < primes.size(); ip++)
 			if (num % primes[ip] == 0)
@@ -129,8 +124,10 @@ std::string comma_delim(size_t n)
 
 	//std::cerr << "str_bare len = " << nstr << "\n";
 	if (nstr <= 4)
-		// stylistic preference: don't dangle a single digit for 4 digit numbers
+	{
+		// Stylistic preference: don't dangle a single digit for 4 digit numbers
 		return str_bare;
+	}
 
 	// Should use str builder but these aren't very big
 	std::string str = "";
@@ -273,7 +270,7 @@ int main(int argc, char* argv[])
 	auto nth_prime = nth_prime_number(days, primes);
 	write_file_vec_size_t(primes, CACHE_FILENAME);
 
-	// log nothing else after this.  the run.sh script will pickup the last line
+	// Log nothing else after this.  the run.sh script will pickup the last line
 	// of stdout for the text payload
 	std::cout << comma_delim(nth_prime) << "\n";
 
