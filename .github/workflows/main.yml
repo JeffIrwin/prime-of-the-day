@@ -67,7 +67,10 @@ jobs:
         GH_PA_TOKEN: ${{ secrets.GH_PA_TOKEN }}
       run: |
         chmod +x ./run.sh
-        ./run.sh
+        ## disabled because i guess my api token expired but i'm also tired of
+        ## dealing with it
+        #./run.sh
+        ./run.sh -- dry
 
     - name: "log date end"
       run: |
