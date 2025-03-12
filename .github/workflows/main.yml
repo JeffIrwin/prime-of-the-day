@@ -70,7 +70,7 @@ jobs:
         ## disabled because i guess my api token expired but i'm also tired of
         ## dealing with it
         #./run.sh
-        ./run.sh -- dry
+        ./run.sh --dry
 
     - name: "log date end"
       run: |
