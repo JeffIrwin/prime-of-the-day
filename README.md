@@ -78,4 +78,3 @@ The scheduled event does a wet run.
 
 <!-- maybe say something about image generation after i put that into a
 production -->
-
